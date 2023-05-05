@@ -14,7 +14,7 @@ public class InvoiceApproversGetEndpointsTest
         var result = InvoiceApproversGetEndpoints.GetApproversForInvoiceBySchemeAndAmount(invoiceScheme, invoiceAmount);
 
         Assert.NotNull(result);
-        
+
         // Assert that the status code is 200
         result.GetOkObjectResultStatusCode().Should().Be(200);
 
