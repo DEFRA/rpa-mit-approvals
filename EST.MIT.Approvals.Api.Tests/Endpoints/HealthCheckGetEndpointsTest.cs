@@ -12,7 +12,7 @@ public class HealthCheckGetEndpointsTest
         var result = HealthCheckGetEndpoints.HealthCheckPing();
 
         Assert.NotNull(result);
-        
+
         // Assert that the status code is 200
         result.GetOkObjectResultStatusCode().Should().Be(200);
 
