@@ -18,11 +18,11 @@ steps:
     SonarCloud: 'SonarCloud EST.MIT.Approvals'
     organization: 'defra'
     scannerMode: 'MSBuild'
-    projectKey: '[EST.MIT.Approvals]'
-    projectName: '[EST.MIT.Approvals]'
+    projectKey: 'EST.MIT.Approvals'
+    projectName: 'EST.MIT.Approvals'
     extraProperties: |
-      sonar.exclusions=**/obj/**,**/*.dll,**/*.cshtml,**/*.css,**/*.js,**/*.json,**/wwwroot/**,**/[ EST.MIT.Invoice.Api.Tests]/**,**/Program.cs
-      sonar.test.exclusions=**/obj/**,**/*.dll,**/*.cshtml,**/*.css,**/*.js,**/*.json,**/wwwroot/**,**/[ EST.MIT.Invoice.Api.Tests]/**
+      sonar.exclusions=**/obj/**,**/*.dll,**/*.cshtml,**/*.css,**/*.js,**/*.json,**/wwwroot/**,**/EST.MIT.Invoice.Api.Tests/**,**/Program.cs
+      sonar.test.exclusions=**/obj/**,**/*.dll,**/*.cshtml,**/*.css,**/*.js,**/*.json,**/wwwroot/**,**/EST.MIT.Invoice.Api.Tests/**
       sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.opencover.xml
       $(additionalSonarParams)
 
@@ -71,7 +71,7 @@ steps:
   displayName: 'Publish Website Artifacts'
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)'
-    artifactName: '[EST.MIT.Approvals]'
+    artifactName: 'EST.MIT.Approvals'
 
 - task: SonarCloudPublish@1
   displayName: 'Publish Sonar Results'
