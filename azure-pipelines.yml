@@ -15,7 +15,7 @@ steps:
 - task: SonarCloudPrepare@1
   displayName: 'Prepare analysis on SonarCloud'
   inputs:
-    SonarCloud: 'SonarCloud [EST.MIT.Approvals]'
+    SonarCloud: 'SonarCloud EST.MIT.Approvals'
     organization: 'defra'
     scannerMode: 'MSBuild'
     projectKey: '[defra_est-mit-approvals]'
