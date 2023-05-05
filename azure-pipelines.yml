@@ -18,7 +18,7 @@ steps:
     SonarCloud: 'SonarCloud EST.MIT.Approvals'
     organization: 'defra'
     scannerMode: 'MSBuild'
-    projectKey: '[defra_est-mit-approvals]'
+    projectKey: '[EST.MIT.Approvals]'
     projectName: '[EST.MIT.Approvals]'
     extraProperties: |
       sonar.exclusions=**/obj/**,**/*.dll,**/*.cshtml,**/*.css,**/*.js,**/*.json,**/wwwroot/**,**/[ EST.MIT.Invoice.Api.Tests]/**,**/Program.cs
