@@ -67,7 +67,6 @@ public class InvoiceApproversGetEndpointsTest
         var result = await InvoiceApproversGetEndpoints.GetApproversForInvoiceBySchemeAndAmountAsync(this._invoiceApproverServiceMock, invoiceScheme, invoiceAmount);
 
         Assert.NotNull(result);
-        
         result.GetNotFoundResultStatusCode().Should().Be(404);
     }
 
@@ -89,7 +88,7 @@ public class InvoiceApproversGetEndpointsTest
         var result = await InvoiceApproversGetEndpoints.GetApproversForInvoiceBySchemeAndAmountAsync(this._invoiceApproverServiceMock, invoiceScheme, invoiceAmount);
 
         Assert.NotNull(result);
-        
+
         result.GetBadRequestStatusCode().Should().Be(400);
         var actualMessage = result.GetBadRequestResultValue<string>();
         Assert.Contains(expectedMessage, actualMessage);

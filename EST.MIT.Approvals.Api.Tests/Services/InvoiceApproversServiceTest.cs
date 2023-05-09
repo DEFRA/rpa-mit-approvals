@@ -51,7 +51,7 @@ public class InvoiceApproversServiceTest
         var result = await _serviceToTest.GetApproversForInvoiceBySchemeAndAmountAsync(invoiceScheme, invoiceAmount);
 
         Assert.NotNull(result);
-    
+
         Assert.True(result.IsSuccess);
         var returnedPayload = result.Data.ToList();
 

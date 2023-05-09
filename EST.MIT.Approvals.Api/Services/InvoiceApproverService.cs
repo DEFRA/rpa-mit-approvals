@@ -13,12 +13,12 @@ public class InvoiceApproverService : IInvoiceApproverService
 
     public async Task<ReturnResult<IEnumerable<InvoiceApprover>>> GetApproversForInvoiceBySchemeAndAmountAsync(string invoiceScheme, decimal invoiceAmount)
     {
-        var returnValue = new ReturnResult<IEnumerable<InvoiceApprover>> ();
+        var returnValue = new ReturnResult<IEnumerable<InvoiceApprover>>();
 
         try
         {
 
-            returnValue.Data = new List<InvoiceApprover> ()
+            returnValue.Data = new List<InvoiceApprover>()
             {
                 new InvoiceApprover()
                 {

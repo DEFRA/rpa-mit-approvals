@@ -10,7 +10,7 @@ public static class InvoiceApproversGetEndpoints
     [ExcludeFromCodeCoverage]
     public static IEndpointRouteBuilder MapInvoiceApproversGetEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGet("/approvals/invoiceapprovers", ([FromServices] IInvoiceApproverService invoiceApproverService ,string invoiceScheme, decimal invoiceAmount) => GetApproversForInvoiceBySchemeAndAmountAsync(invoiceApproverService, invoiceScheme, invoiceAmount))
+        app.MapGet("/approvals/invoiceapprovers", ([FromServices] IInvoiceApproverService invoiceApproverService, string invoiceScheme, decimal invoiceAmount) => GetApproversForInvoiceBySchemeAndAmountAsync(invoiceApproverService, invoiceScheme, invoiceAmount))
             .Produces<IEnumerable<InvoiceApprover>>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest)
             .WithName("GetApproversForInvoiceBySchemeAndAmount");
