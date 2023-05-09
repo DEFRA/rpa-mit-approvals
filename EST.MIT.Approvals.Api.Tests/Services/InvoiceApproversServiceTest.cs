@@ -56,18 +56,26 @@ public class InvoiceApproversServiceTest
         var returnedPayload = result.Data.ToList();
 
         Assert.NotNull(returnedPayload);
-        Assert.Equal(expectedPayload.Count, returnedPayload?.Count());
-        Assert.Equal(expectedPayload[0].Id, returnedPayload[0]?.Id);
-        Assert.Equal(expectedPayload[0].FirstName, returnedPayload[0]?.FirstName);
-        Assert.Equal(expectedPayload[0].LastName, returnedPayload[0]?.LastName);
-        Assert.Equal(expectedPayload[0].EmailAddress, returnedPayload[0]?.EmailAddress);
-        Assert.Equal(expectedPayload[1].Id, returnedPayload[1].Id);
-        Assert.Equal(expectedPayload[1].FirstName, returnedPayload[1]?.FirstName);
-        Assert.Equal(expectedPayload[1].LastName, returnedPayload[1]?.LastName);
-        Assert.Equal(expectedPayload[1].EmailAddress, returnedPayload[1]?.EmailAddress);
-        Assert.Equal(expectedPayload[2].Id, returnedPayload[2].Id);
-        Assert.Equal(expectedPayload[2].FirstName, returnedPayload[2]?.FirstName);
-        Assert.Equal(expectedPayload[2].LastName, returnedPayload[2]?.LastName);
-        Assert.Equal(expectedPayload[2].EmailAddress, returnedPayload[2]?.EmailAddress);
+        Assert.Equal(expectedPayload.Count, returnedPayload?.Count);
+
+        if (returnedPayload != null && returnedPayload.Count > 2)
+        {
+            Assert.Equal(expectedPayload[0].Id, returnedPayload[0]?.Id);
+            Assert.Equal(expectedPayload[0].FirstName, returnedPayload[0]?.FirstName);
+            Assert.Equal(expectedPayload[0].LastName, returnedPayload[0]?.LastName);
+            Assert.Equal(expectedPayload[0].EmailAddress, returnedPayload[0]?.EmailAddress);
+            Assert.Equal(expectedPayload[1].Id, returnedPayload[1].Id);
+            Assert.Equal(expectedPayload[1].FirstName, returnedPayload[1]?.FirstName);
+            Assert.Equal(expectedPayload[1].LastName, returnedPayload[1]?.LastName);
+            Assert.Equal(expectedPayload[1].EmailAddress, returnedPayload[1]?.EmailAddress);
+            Assert.Equal(expectedPayload[2].Id, returnedPayload[2].Id);
+            Assert.Equal(expectedPayload[2].FirstName, returnedPayload[2]?.FirstName);
+            Assert.Equal(expectedPayload[2].LastName, returnedPayload[2]?.LastName);
+            Assert.Equal(expectedPayload[2].EmailAddress, returnedPayload[2]?.EmailAddress);
+        }
+        else
+        {
+            Assert.Fail("Expected returned payload to be not null and have items");
+        }
     }
 }

@@ -17,36 +17,38 @@ public class InvoiceApproverService : IInvoiceApproverService
 
         try
         {
-
-            returnValue.Data = new List<InvoiceApprover>()
+            returnValue = await Task.Run(() => new ReturnResult<IEnumerable<InvoiceApprover>>()
             {
-                new InvoiceApprover()
+                Data = new List<InvoiceApprover>()
                 {
-                    Id = 1,
-                    EmailAddress = "ApproverOne@defra.gov.uk",
-                    FirstName = "Approver",
-                    LastName = "One,"
+                    new InvoiceApprover()
+                    {
+                        Id = 1,
+                        EmailAddress = "ApproverOne@defra.gov.uk",
+                        FirstName = "Approver",
+                        LastName = "One,"
+                    },
+                    new InvoiceApprover()
+                    {
+                        Id = 2,
+                        EmailAddress = "ApproverTwo@defra.gov.uk",
+                        FirstName = "Approver",
+                        LastName = "Two,"
+                    },
+                    new InvoiceApprover()
+                    {
+                        Id = 1,
+                        EmailAddress = "ApproverThree@defra.gov.uk",
+                        FirstName = "Approver",
+                        LastName = "Three,"
+                    }
                 },
-                new InvoiceApprover()
-                {
-                    Id = 2,
-                    EmailAddress = "ApproverTwo@defra.gov.uk",
-                    FirstName = "Approver",
-                    LastName = "Two,"
-                },
-                new InvoiceApprover()
-                {
-                    Id = 1,
-                    EmailAddress = "ApproverThree@defra.gov.uk",
-                    FirstName = "Approver",
-                    LastName = "Three,"
-                }
-            };
-            returnValue.IsSuccess = true;
+                IsSuccess = true
+            });
         }
         catch (Exception exception)
         {
-            this._logger.LogError(exception, exception.Message);
+            this._logger.LogError(exception, "Unable to get approvers for invoice");
             returnValue.Message = exception.Message;
         }
 

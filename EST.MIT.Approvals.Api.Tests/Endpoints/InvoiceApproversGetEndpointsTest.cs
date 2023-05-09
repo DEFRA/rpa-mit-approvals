@@ -44,11 +44,20 @@ public class InvoiceApproversGetEndpointsTest
         var returnedPayload = result.GetOkObjectResultValue<IEnumerable<InvoiceApprover>>() as List<InvoiceApprover>;
 
         Assert.NotNull(returnedPayload);
-        Assert.Equal(1, returnedPayload?.Count());
-        Assert.Equal(expectedApprover.Id, returnedPayload[0]?.Id);
-        Assert.Equal(expectedApprover.FirstName, returnedPayload[0]?.FirstName);
-        Assert.Equal(expectedApprover.LastName, returnedPayload[0]?.LastName);
-        Assert.Equal(expectedApprover.EmailAddress, returnedPayload[0]?.EmailAddress);
+        Assert.Equal(1, returnedPayload?.Count);
+
+        if (returnedPayload != null && returnedPayload.Any())
+        {
+            Assert.Equal(expectedApprover.Id, returnedPayload[0]?.Id);
+            Assert.Equal(expectedApprover.FirstName, returnedPayload[0]?.FirstName);
+            Assert.Equal(expectedApprover.LastName, returnedPayload[0]?.LastName);
+            Assert.Equal(expectedApprover.EmailAddress, returnedPayload[0]?.EmailAddress);
+        }
+        else
+        {
+            Assert.Fail("Expected returned payload to be not null and have items");
+        }
+
     }
 
     [Fact]
