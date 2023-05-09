@@ -21,8 +21,8 @@ steps:
     projectKey: 'EST.MIT.Approvals'
     projectName: 'EST.MIT.Approvals'
     extraProperties: |
-      sonar.exclusions=**/obj/**,**/*.dll,**/*.cshtml,**/*.css,**/*.js,**/*.json,**/wwwroot/**,**/EST.MIT.Invoice.Api.Tests/**,**/Program.cs
-      sonar.test.exclusions=**/obj/**,**/*.dll,**/*.cshtml,**/*.css,**/*.js,**/*.json,**/wwwroot/**,**/EST.MIT.Invoice.Api.Tests/**
+      sonar.exclusions=**/obj/**,**/*.dll,**/*.cshtml,**/*.css,**/*.js,**/*.json,**/wwwroot/**,**/EST.MIT.Approvals.Api.Tests/**,**/Program.cs
+      sonar.test.exclusions=**/obj/**,**/*.dll,**/*.cshtml,**/*.css,**/*.js,**/*.json,**/wwwroot/**,**/EST.MIT.Approvals.Api.Tests/**
       sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.opencover.xml
       $(additionalSonarParams)
 
@@ -44,7 +44,7 @@ steps:
   displayName: 'Run Tests'
   inputs:
     command: test
-    projects: '**/*Test/*.csproj'
+    projects: '**/*Tests/*.csproj'
     arguments: '--no-build --configuration $(buildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura,opencover'
     publishTestResults: false
 
