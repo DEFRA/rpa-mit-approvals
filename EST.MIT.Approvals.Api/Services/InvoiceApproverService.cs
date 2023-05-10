@@ -1,13 +1,16 @@
-﻿using Approvals.Api.Models;
+﻿using Approvals.Api.Data.Repositories;
+using Approvals.Api.Models;
 
 namespace Approvals.Api.Services;
 
 public class InvoiceApproverService : IInvoiceApproverService
 {
+    private readonly IApproverRepository _approverRepository;
     private readonly ILogger<InvoiceApproverService> _logger;
 
-    public InvoiceApproverService(ILogger<InvoiceApproverService> logger)
+    public InvoiceApproverService(IApproverRepository approverRepository, ILogger<InvoiceApproverService> logger)
     {
+        _approverRepository = approverRepository;
         _logger = logger;
     }
 
@@ -17,34 +20,15 @@ public class InvoiceApproverService : IInvoiceApproverService
 
         try
         {
-            returnValue = await Task.Run(() => new ReturnResult<IEnumerable<InvoiceApprover>>()
+            var approvers = await this._approverRepository.GetApproversByGradeAsync(0);
+            returnValue.Data = approvers.Select(x => new InvoiceApprover()
             {
-                Data = new List<InvoiceApprover>()
-                {
-                    new InvoiceApprover()
-                    {
-                        Id = 1,
-                        EmailAddress = "ApproverOne@defra.gov.uk",
-                        FirstName = "Approver",
-                        LastName = "One,"
-                    },
-                    new InvoiceApprover()
-                    {
-                        Id = 2,
-                        EmailAddress = "ApproverTwo@defra.gov.uk",
-                        FirstName = "Approver",
-                        LastName = "Two,"
-                    },
-                    new InvoiceApprover()
-                    {
-                        Id = 1,
-                        EmailAddress = "ApproverThree@defra.gov.uk",
-                        FirstName = "Approver",
-                        LastName = "Three,"
-                    }
-                },
-                IsSuccess = true
+                Id = x.Id,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                EmailAddress = x.EmailAddress,
             });
+            returnValue.IsSuccess = true;
         }
         catch (Exception exception)
         {

@@ -78,4 +78,32 @@ public class InvoiceApproversServiceTest
             Assert.Fail("Expected returned payload to be not null and have items");
         }
     }
+
+    [Fact]
+    public async Task InvoiceApproversService_GetApproversForInvoiceBySchemeAndAmount_ShouldReturnFailure_OnException()
+    {
+        // Arrange
+        var invoiceScheme = "ABC";
+        var invoiceAmount = 2000M;
+
+        // Mock logger to throw an exception
+        var loggerMock = new Mock<ILogger<InvoiceApproverService>>();
+        loggerMock.Setup(logger => logger.LogError(It.IsAny<Exception>(), It.IsAny<string>()))
+            .Callback(() => throw new InvalidOperationException("Test Exception"));
+
+        var serviceToTest = new InvoiceApproverService(loggerMock.Object);
+
+        // Act
+        var result = await serviceToTest.GetApproversForInvoiceBySchemeAndAmountAsync(invoiceScheme, invoiceAmount);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.False(result.IsSuccess);
+        Assert.Null(result.Data);
+        Assert.Equal("Test Exception", result.Message);
+    }
+
+
+
+
 }
