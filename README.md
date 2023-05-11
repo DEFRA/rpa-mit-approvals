@@ -11,6 +11,11 @@ TODO: Guide users through getting your code up and running on their own system. 
 # Build and Test
 TODO: Describe and show how to build your code and run the tests. 
 
+| Name                                              |  Status|
+|---------------------------------------------------|---------------------|
+|[Build]() | [![Build Status](https://dev.azure.com/defragovuk/DEFRA-EST/_apis/build/status/EST.MIT.Approvals?branchName=main)](https://dev.azure.com/defragovuk/DEFRA-EST/_build/latest?definitionId=3703&branchName=main) |
+|[SonarCloud](https://sonarcloud.io/project/overview?id=EST.MIT.Approvals)| [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=EST.MIT.Approvals&metric=alert_status&token=e40e1dada8517104fe7cb280a5a9de6b558a717c)](https://sonarcloud.io/summary/new_code?id=EST.MIT.Approvals) |
+
 # Contribute
 TODO: Explain how other users and developers can contribute to make your code better. 
 
