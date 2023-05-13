@@ -14,8 +14,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Data\Entities\BaseEntity.cs" />
+    <Compile Include="Data\Entities\SchemeGradeApproverEntity.cs" />
+    <Compile Include="Data\Entities\SchemeEntity.cs" />
+    <Compile Include="Data\Entities\GradeEntity.cs" />
     <Compile Include="Data\Entities\ApproverEntity.cs" />
-    <Compile Include="Data\Repositories\IApproverRepository.cs" />
+    <Compile Include="Data\Repositories\SchemeGradeApproverRepository.cs" />
+    <Compile Include="Data\Repositories\Interfaces\ISchemeGradeApproverRepository.cs" />
+    <Compile Include="Data\Repositories\SchemeRepository.cs" />
+    <Compile Include="Data\Repositories\GradeRepository.cs" />
+    <Compile Include="Data\Repositories\Interfaces\ISchemeRepository.cs" />
+    <Compile Include="Data\Repositories\Repository.cs" />
+    <Compile Include="Data\Repositories\Interfaces\IRepository.cs" />
+    <Compile Include="Data\Repositories\Interfaces\IGradeRepository.cs" />
+    <Compile Include="Data\Repositories\Interfaces\IApproverRepository.cs" />
     <Compile Include="Data\Repositories\ApproverRepository.cs" />
   </ItemGroup>
 

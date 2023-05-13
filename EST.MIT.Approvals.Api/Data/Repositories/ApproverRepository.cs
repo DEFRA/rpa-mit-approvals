@@ -1,12 +1,14 @@
 ﻿using Approvals.Api.Data.Entities;
+using EST.MIT.Approvals.Api.Data.Repositories.Interfaces;
 
 namespace Approvals.Api.Data.Repositories;
 
-public class ApproverRepository : IApproverRepository
+public class ApproverRepository : Repository<ApproverEntity>, IApproverRepository
 {
-    public async Task<IEnumerable<ApproverEntity>> GetApproversByGradeAsync(int grade)
+    public ApproverRepository()
+        : base()
     {
-        return await Task.Run(() => new List<ApproverEntity>()
+        var approvers = new List<ApproverEntity>()
         {
             new ApproverEntity()
             {
@@ -29,6 +31,13 @@ public class ApproverRepository : IApproverRepository
                 FirstName = "Approver",
                 LastName = "Three,"
             }
-        });
+        };
+        this.Initialise(approvers);
+    }
+    public async Task<IEnumerable<ApproverEntity>> GetApproversByIdsAsync(IEnumerable<int> ids)
+    {
+        var all = await this.GetAllAsync();
+
+        return all.Where(x => ids.Contains(x.Id));
     }
 }

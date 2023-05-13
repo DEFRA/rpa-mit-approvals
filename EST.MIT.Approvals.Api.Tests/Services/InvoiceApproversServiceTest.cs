@@ -2,19 +2,29 @@
 using Microsoft.Extensions.Logging;
 using Moq;
 using Approvals.Api.Models;
+using EST.MIT.Approvals.Api.Data.Repositories.Interfaces;
 
 namespace Approvals.Api.Tests.Services;
 
 public class InvoiceApproversServiceTest
 {
     private readonly InvoiceApproverService _serviceToTest;
+
+    private readonly Mock<ISchemeRepository> _schemeRepositoryMock;
+    private readonly Mock<IGradeRepository> _gradeRepositoryMock;
+    private readonly Mock<IApproverRepository> _approverRepositoryMock;
+    private readonly Mock<ISchemeGradeApproverRepository> _schemeGradeApproverRepositoryMock;
     private readonly Mock<ILogger<InvoiceApproverService>> _loggerMock;
 
     public InvoiceApproversServiceTest()
     {
-        _loggerMock = new Mock<ILogger<InvoiceApproverService>>();
+        this._schemeRepositoryMock = new Mock<ISchemeRepository>();
+        this._gradeRepositoryMock = new Mock<IGradeRepository>();
+        this._approverRepositoryMock = new Mock<IApproverRepository>();
+        this._schemeGradeApproverRepositoryMock = new Mock<ISchemeGradeApproverRepository>();
+        this._loggerMock = new Mock<ILogger<InvoiceApproverService>>();
 
-        this._serviceToTest = new InvoiceApproverService(_loggerMock.Object);
+        this._serviceToTest = new InvoiceApproverService(this._schemeRepositoryMock.Object, this._gradeRepositoryMock.Object, this._approverRepositoryMock.Object, this._schemeGradeApproverRepositoryMock.Object, this._loggerMock.Object);
     }
 
     [Fact]
@@ -91,7 +101,7 @@ public class InvoiceApproversServiceTest
         loggerMock.Setup(logger => logger.LogError(It.IsAny<Exception>(), It.IsAny<string>()))
             .Callback(() => throw new InvalidOperationException("Test Exception"));
 
-        var serviceToTest = new InvoiceApproverService(loggerMock.Object);
+        var serviceToTest = new InvoiceApproverService(this._schemeRepositoryMock.Object, this._gradeRepositoryMock.Object, this._approverRepositoryMock.Object, this._schemeGradeApproverRepositoryMock.Object, this._loggerMock.Object);
 
         // Act
         var result = await serviceToTest.GetApproversForInvoiceBySchemeAndAmountAsync(invoiceScheme, invoiceAmount);

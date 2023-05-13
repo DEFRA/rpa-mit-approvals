@@ -1,6 +1,6 @@
 ﻿using Approvals.Api.Models;
 
-namespace Approvals.Api.Services;
+namespace EST.MIT.Approvals.Api.Services.Interfaces;
 
 public interface IInvoiceApproverService
 {

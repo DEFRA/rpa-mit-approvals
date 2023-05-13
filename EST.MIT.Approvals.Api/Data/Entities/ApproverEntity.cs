@@ -1,9 +1,7 @@
 ﻿namespace Approvals.Api.Data.Entities;
 
-public class ApproverEntity
+public class ApproverEntity : BaseEntity
 {
-    public int Id { get; init; } = default!;
-
     public string EmailAddress { get; init; } = default!;
 
     public string FirstName { get; init; } = default!;
