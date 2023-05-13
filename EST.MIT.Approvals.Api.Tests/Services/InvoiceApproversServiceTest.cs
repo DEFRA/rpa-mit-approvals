@@ -1,4 +1,5 @@
-﻿using Approvals.Api.Services;
+﻿using Approvals.Api.Data.Entities;
+using Approvals.Api.Services;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Approvals.Api.Models;
@@ -16,6 +17,11 @@ public class InvoiceApproversServiceTest
     private readonly Mock<ISchemeGradeApproverRepository> _schemeGradeApproverRepositoryMock;
     private readonly Mock<ILogger<InvoiceApproverService>> _loggerMock;
 
+    private readonly SchemeEntity _scheme;
+    private readonly GradeEntity _grade;
+    private readonly ApproverEntity _approver;
+    private readonly SchemeGradeApproverEntity _schemeGradeApprover;
+
     public InvoiceApproversServiceTest()
     {
         this._schemeRepositoryMock = new Mock<ISchemeRepository>();
@@ -23,6 +29,46 @@ public class InvoiceApproversServiceTest
         this._approverRepositoryMock = new Mock<IApproverRepository>();
         this._schemeGradeApproverRepositoryMock = new Mock<ISchemeGradeApproverRepository>();
         this._loggerMock = new Mock<ILogger<InvoiceApproverService>>();
+
+        this._scheme = new SchemeEntity()
+        {
+            Id = 1,
+            Code = "A1",
+        };
+
+        this._schemeRepositoryMock.Setup(repository => repository.GetByCodeAsync(It.IsAny<string>()))
+            .ReturnsAsync(() => this._scheme);
+
+        this._grade = new GradeEntity()
+        {
+            Id = 1,
+            ApprovalLimit = 1000,
+        };
+
+        this._gradeRepositoryMock.Setup(repository => repository.GetByApprovalLimit(It.IsAny<decimal>()))
+            .ReturnsAsync(() => this._grade);
+
+        this._approver = new ApproverEntity()
+        {
+            Id = 1,
+            EmailAddress = "ApproverOne@defra.gov.uk",
+            FirstName = "Approver",
+            LastName = "One",
+        };
+
+        this._approverRepositoryMock.Setup(repository => repository.GetApproversByIdsAsync(It.IsAny<IEnumerable<int>>()))
+            .ReturnsAsync(() => new List<ApproverEntity>() { this._approver });
+
+        this._schemeGradeApprover = new SchemeGradeApproverEntity()
+        {
+            Id = 1,
+            SchemeId = 1,
+            GradeId = 1,
+            ApproverId = 1,
+        };
+
+        this._schemeGradeApproverRepositoryMock.Setup(repository => repository.GetAllBySchemeAndGrade(It.IsAny<int>(), It.IsAny<int>()))
+            .ReturnsAsync(() => new List<SchemeGradeApproverEntity>() { this._schemeGradeApprover });
 
         this._serviceToTest = new InvoiceApproverService(this._schemeRepositoryMock.Object, this._gradeRepositoryMock.Object, this._approverRepositoryMock.Object, this._schemeGradeApproverRepositoryMock.Object, this._loggerMock.Object);
     }
@@ -40,22 +86,8 @@ public class InvoiceApproversServiceTest
                 Id = 1,
                 EmailAddress = "ApproverOne@defra.gov.uk",
                 FirstName = "Approver",
-                LastName = "One,"
+                LastName = "One"
             },
-            new InvoiceApprover()
-            {
-                Id = 2,
-                EmailAddress = "ApproverTwo@defra.gov.uk",
-                FirstName = "Approver",
-                LastName = "Two,"
-            },
-            new InvoiceApprover()
-            {
-                Id = 1,
-                EmailAddress = "ApproverThree@defra.gov.uk",
-                FirstName = "Approver",
-                LastName = "Three,"
-            }
         };
 
         var result = await _serviceToTest.GetApproversForInvoiceBySchemeAndAmountAsync(invoiceScheme, invoiceAmount);
@@ -68,20 +100,12 @@ public class InvoiceApproversServiceTest
         Assert.NotNull(returnedPayload);
         Assert.Equal(expectedPayload.Count, returnedPayload?.Count);
 
-        if (returnedPayload != null && returnedPayload.Count > 2)
+        if (returnedPayload != null && returnedPayload.Count == 1)
         {
             Assert.Equal(expectedPayload[0].Id, returnedPayload[0]?.Id);
             Assert.Equal(expectedPayload[0].FirstName, returnedPayload[0]?.FirstName);
             Assert.Equal(expectedPayload[0].LastName, returnedPayload[0]?.LastName);
             Assert.Equal(expectedPayload[0].EmailAddress, returnedPayload[0]?.EmailAddress);
-            Assert.Equal(expectedPayload[1].Id, returnedPayload[1].Id);
-            Assert.Equal(expectedPayload[1].FirstName, returnedPayload[1]?.FirstName);
-            Assert.Equal(expectedPayload[1].LastName, returnedPayload[1]?.LastName);
-            Assert.Equal(expectedPayload[1].EmailAddress, returnedPayload[1]?.EmailAddress);
-            Assert.Equal(expectedPayload[2].Id, returnedPayload[2].Id);
-            Assert.Equal(expectedPayload[2].FirstName, returnedPayload[2]?.FirstName);
-            Assert.Equal(expectedPayload[2].LastName, returnedPayload[2]?.LastName);
-            Assert.Equal(expectedPayload[2].EmailAddress, returnedPayload[2]?.EmailAddress);
         }
         else
         {
@@ -97,11 +121,11 @@ public class InvoiceApproversServiceTest
         var invoiceAmount = 2000M;
 
         // Mock logger to throw an exception
-        var loggerMock = new Mock<ILogger<InvoiceApproverService>>();
-        loggerMock.Setup(logger => logger.LogError(It.IsAny<Exception>(), It.IsAny<string>()))
-            .Callback(() => throw new InvalidOperationException("Test Exception"));
+        var schemeRepositoryMock = new Mock<ISchemeRepository>();
+        schemeRepositoryMock.Setup(repository => repository.GetByCodeAsync(It.IsAny<string>()))
+            .Throws(new Exception("Unit Test Exception"));
 
-        var serviceToTest = new InvoiceApproverService(this._schemeRepositoryMock.Object, this._gradeRepositoryMock.Object, this._approverRepositoryMock.Object, this._schemeGradeApproverRepositoryMock.Object, this._loggerMock.Object);
+        var serviceToTest = new InvoiceApproverService(schemeRepositoryMock.Object, this._gradeRepositoryMock.Object, this._approverRepositoryMock.Object, this._schemeGradeApproverRepositoryMock.Object, this._loggerMock.Object);
 
         // Act
         var result = await serviceToTest.GetApproversForInvoiceBySchemeAndAmountAsync(invoiceScheme, invoiceAmount);
@@ -110,7 +134,7 @@ public class InvoiceApproversServiceTest
         Assert.NotNull(result);
         Assert.False(result.IsSuccess);
         Assert.Null(result.Data);
-        Assert.Equal("Test Exception", result.Message);
+        Assert.Equal("Unit Test Exception", result.Message);
     }
 
 
