@@ -53,12 +53,20 @@ public class InvoiceApproverService : IInvoiceApproverService
 
             if (!schemeGradeApproverEntities.Any())
             {
-                returnValue.Message = "Unable to find matching approvers";
+                returnValue.Message = "Unable to find matching scheme and grade approvers";
                 return returnValue;
             }
 
             var approvers = await this._approverRepository.GetApproversByIdsAsync(schemeGradeApproverEntities.Select(x => x.ApproverId));
-            returnValue.Data = approvers.Select(x => new InvoiceApprover()
+
+            var approverEntities = approvers.ToList();
+            if (!approverEntities.Any())
+            {
+                returnValue.Message = "Unable to find matching approvers";
+                return returnValue;
+            }
+
+            returnValue.Data = approverEntities.Select(x => new InvoiceApprover()
             {
                 Id = x.Id,
                 FirstName = x.FirstName,

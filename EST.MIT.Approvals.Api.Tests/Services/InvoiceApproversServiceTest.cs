@@ -137,7 +137,63 @@ public class InvoiceApproversServiceTest
         Assert.Equal("Unit Test Exception", result.Message);
     }
 
+    [Fact]
+    public async Task GetApproversForInvoiceBySchemeAndAmount_ShouldReturnFailure_WhenSchemeNotFound()
+    {
+        // Arrange
+        var invoiceScheme = "XYZ";
+        var invoiceAmount = 2000M;
 
+        _schemeRepositoryMock.Setup(repository => repository.GetByCodeAsync(It.IsAny<string>()))
+            .ReturnsAsync((SchemeEntity)null);
 
+        // Act
+        var result = await _serviceToTest.GetApproversForInvoiceBySchemeAndAmountAsync(invoiceScheme, invoiceAmount);
 
+        // Assert
+        Assert.NotNull(result);
+        Assert.False(result.IsSuccess);
+        Assert.Null(result.Data);
+        Assert.Equal("Unable to find matching scheme", result.Message);
+    }
+
+    [Fact]
+    public async Task GetApproversForInvoiceBySchemeAndAmount_ShouldReturnFailure_WhenGradeNotFound()
+    {
+        // Arrange
+        var invoiceScheme = "ABC";
+        var invoiceAmount = 10000M;
+
+        _gradeRepositoryMock.Setup(repository => repository.GetByApprovalLimit(It.IsAny<decimal>()))
+            .ReturnsAsync((GradeEntity)null);
+
+        // Act
+        var result = await _serviceToTest.GetApproversForInvoiceBySchemeAndAmountAsync(invoiceScheme, invoiceAmount);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.False(result.IsSuccess);
+        Assert.Null(result.Data);
+        Assert.Equal("Unable to find matching grade", result.Message);
+    }
+
+    [Fact]
+    public async Task GetApproversForInvoiceBySchemeAndAmount_ShouldReturnFailure_WhenApproverNotFound()
+    {
+        // Arrange
+        var invoiceScheme = "ABC";
+        var invoiceAmount = 2000M;
+
+        _approverRepositoryMock.Setup(repository => repository.GetApproversByIdsAsync(It.IsAny<IEnumerable<int>>()))
+            .ReturnsAsync(new List<ApproverEntity>());
+
+        // Act
+        var result = await _serviceToTest.GetApproversForInvoiceBySchemeAndAmountAsync(invoiceScheme, invoiceAmount);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.False(result.IsSuccess);
+        Assert.Null(result.Data);
+        Assert.Equal("Unable to find matching approvers", result.Message);
+    }
 }

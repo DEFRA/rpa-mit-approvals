@@ -34,4 +34,5 @@ public static class InvoiceApproversGetEndpoints
 
         return Results.Ok(response.Data);
     }
+
 }
