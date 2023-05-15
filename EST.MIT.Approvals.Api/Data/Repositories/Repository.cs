@@ -58,23 +58,24 @@ public abstract class Repository<T> : IRepository<T> where T : BaseEntity
             }
 
             return this._entities.FirstOrDefault(x => x.Id == id);
-
         });
     }
-    
+
     public async Task<int> InsertRangeAsync(IEnumerable<T> list)
     {
-        throw new NotImplementedException();
+        await Task.CompletedTask;
+        throw new NotImplementedException("InsertRangeAsync");
     }
 
     public async Task<int> InsertAsync(T t)
     {
-        throw new NotImplementedException();
+        await Task.CompletedTask;
+        throw new NotImplementedException("InsertAsync");
     }
-    
 
     public async Task UpdateAsync(T t)
     {
-        throw new NotImplementedException();
+        await Task.CompletedTask;
+        throw new NotImplementedException("UpdateAsync");
     }
 }

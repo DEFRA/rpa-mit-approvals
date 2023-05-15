@@ -6,7 +6,7 @@ namespace Approvals.Api.Data.Repositories;
 public class SchemeRepository : Repository<SchemeEntity>, ISchemeRepository
 {
     public SchemeRepository()
-        :base()
+        : base()
     {
         var grades = new List<SchemeEntity>()
         {

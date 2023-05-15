@@ -1,6 +1,6 @@
 ﻿namespace Approvals.Api.Data.Entities;
 
-public class GradeEntity :BaseEntity
+public class GradeEntity : BaseEntity
 {
     public string Name { get; init; } = default!;
 

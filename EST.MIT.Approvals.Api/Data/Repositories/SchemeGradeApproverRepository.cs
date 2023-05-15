@@ -7,7 +7,7 @@ public class SchemeGradeApproverRepository : Repository<SchemeGradeApproverEntit
 {
 
     public SchemeGradeApproverRepository()
-        :base()
+        : base()
     {
         var grades = new List<SchemeGradeApproverEntity>()
         {

@@ -7,7 +7,7 @@ public class GradeRepository : Repository<GradeEntity>, IGradeRepository
 {
 
     public GradeRepository()
-        :base()
+        : base()
     {
         var grades = new List<GradeEntity>()
         {
