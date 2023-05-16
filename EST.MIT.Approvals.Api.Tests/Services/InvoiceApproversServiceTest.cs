@@ -1,20 +1,76 @@
-﻿using Approvals.Api.Services;
+﻿using Approvals.Api.Data.Entities;
+using Approvals.Api.Services;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Approvals.Api.Models;
+using EST.MIT.Approvals.Api.Data.Repositories.Interfaces;
 
 namespace Approvals.Api.Tests.Services;
 
 public class InvoiceApproversServiceTest
 {
     private readonly InvoiceApproverService _serviceToTest;
+
+    private readonly Mock<ISchemeRepository> _schemeRepositoryMock;
+    private readonly Mock<IGradeRepository> _gradeRepositoryMock;
+    private readonly Mock<IApproverRepository> _approverRepositoryMock;
+    private readonly Mock<ISchemeGradeApproverRepository> _schemeGradeApproverRepositoryMock;
     private readonly Mock<ILogger<InvoiceApproverService>> _loggerMock;
+
+    private readonly SchemeEntity _scheme;
+    private readonly GradeEntity _grade;
+    private readonly ApproverEntity _approver;
+    private readonly SchemeGradeApproverEntity _schemeGradeApprover;
 
     public InvoiceApproversServiceTest()
     {
-        _loggerMock = new Mock<ILogger<InvoiceApproverService>>();
+        this._schemeRepositoryMock = new Mock<ISchemeRepository>();
+        this._gradeRepositoryMock = new Mock<IGradeRepository>();
+        this._approverRepositoryMock = new Mock<IApproverRepository>();
+        this._schemeGradeApproverRepositoryMock = new Mock<ISchemeGradeApproverRepository>();
+        this._loggerMock = new Mock<ILogger<InvoiceApproverService>>();
 
-        this._serviceToTest = new InvoiceApproverService(_loggerMock.Object);
+        this._scheme = new SchemeEntity()
+        {
+            Id = 1,
+            Code = "A1",
+        };
+
+        this._schemeRepositoryMock.Setup(repository => repository.GetByCodeAsync(It.IsAny<string>()))
+            .ReturnsAsync(() => this._scheme);
+
+        this._grade = new GradeEntity()
+        {
+            Id = 1,
+            ApprovalLimit = 1000,
+        };
+
+        this._gradeRepositoryMock.Setup(repository => repository.GetByApprovalLimit(It.IsAny<decimal>()))
+            .ReturnsAsync(() => this._grade);
+
+        this._approver = new ApproverEntity()
+        {
+            Id = 1,
+            EmailAddress = "ApproverOne@defra.gov.uk",
+            FirstName = "Approver",
+            LastName = "One",
+        };
+
+        this._approverRepositoryMock.Setup(repository => repository.GetApproversByIdsAsync(It.IsAny<IEnumerable<int>>()))
+            .ReturnsAsync(() => new List<ApproverEntity>() { this._approver });
+
+        this._schemeGradeApprover = new SchemeGradeApproverEntity()
+        {
+            Id = 1,
+            SchemeId = 1,
+            GradeId = 1,
+            ApproverId = 1,
+        };
+
+        this._schemeGradeApproverRepositoryMock.Setup(repository => repository.GetAllBySchemeAndGrade(It.IsAny<int>(), It.IsAny<int>()))
+            .ReturnsAsync(() => new List<SchemeGradeApproverEntity>() { this._schemeGradeApprover });
+
+        this._serviceToTest = new InvoiceApproverService(this._schemeRepositoryMock.Object, this._gradeRepositoryMock.Object, this._approverRepositoryMock.Object, this._schemeGradeApproverRepositoryMock.Object, this._loggerMock.Object);
     }
 
     [Fact]
@@ -30,22 +86,8 @@ public class InvoiceApproversServiceTest
                 Id = 1,
                 EmailAddress = "ApproverOne@defra.gov.uk",
                 FirstName = "Approver",
-                LastName = "One,"
+                LastName = "One"
             },
-            new InvoiceApprover()
-            {
-                Id = 2,
-                EmailAddress = "ApproverTwo@defra.gov.uk",
-                FirstName = "Approver",
-                LastName = "Two,"
-            },
-            new InvoiceApprover()
-            {
-                Id = 1,
-                EmailAddress = "ApproverThree@defra.gov.uk",
-                FirstName = "Approver",
-                LastName = "Three,"
-            }
         };
 
         var result = await _serviceToTest.GetApproversForInvoiceBySchemeAndAmountAsync(invoiceScheme, invoiceAmount);
@@ -58,24 +100,100 @@ public class InvoiceApproversServiceTest
         Assert.NotNull(returnedPayload);
         Assert.Equal(expectedPayload.Count, returnedPayload?.Count);
 
-        if (returnedPayload != null && returnedPayload.Count > 2)
+        if (returnedPayload != null && returnedPayload.Count == 1)
         {
             Assert.Equal(expectedPayload[0].Id, returnedPayload[0]?.Id);
             Assert.Equal(expectedPayload[0].FirstName, returnedPayload[0]?.FirstName);
             Assert.Equal(expectedPayload[0].LastName, returnedPayload[0]?.LastName);
             Assert.Equal(expectedPayload[0].EmailAddress, returnedPayload[0]?.EmailAddress);
-            Assert.Equal(expectedPayload[1].Id, returnedPayload[1].Id);
-            Assert.Equal(expectedPayload[1].FirstName, returnedPayload[1]?.FirstName);
-            Assert.Equal(expectedPayload[1].LastName, returnedPayload[1]?.LastName);
-            Assert.Equal(expectedPayload[1].EmailAddress, returnedPayload[1]?.EmailAddress);
-            Assert.Equal(expectedPayload[2].Id, returnedPayload[2].Id);
-            Assert.Equal(expectedPayload[2].FirstName, returnedPayload[2]?.FirstName);
-            Assert.Equal(expectedPayload[2].LastName, returnedPayload[2]?.LastName);
-            Assert.Equal(expectedPayload[2].EmailAddress, returnedPayload[2]?.EmailAddress);
         }
         else
         {
             Assert.Fail("Expected returned payload to be not null and have items");
         }
+    }
+
+    [Fact]
+    public async Task InvoiceApproversService_GetApproversForInvoiceBySchemeAndAmount_ShouldReturnFailure_OnException()
+    {
+        // Arrange
+        var invoiceScheme = "ABC";
+        var invoiceAmount = 2000M;
+
+        // Mock logger to throw an exception
+        var schemeRepositoryMock = new Mock<ISchemeRepository>();
+        schemeRepositoryMock.Setup(repository => repository.GetByCodeAsync(It.IsAny<string>()))
+            .Throws(new Exception("Unit Test Exception"));
+
+        var serviceToTest = new InvoiceApproverService(schemeRepositoryMock.Object, this._gradeRepositoryMock.Object, this._approverRepositoryMock.Object, this._schemeGradeApproverRepositoryMock.Object, this._loggerMock.Object);
+
+        // Act
+        var result = await serviceToTest.GetApproversForInvoiceBySchemeAndAmountAsync(invoiceScheme, invoiceAmount);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.False(result.IsSuccess);
+        Assert.Null(result.Data);
+        Assert.Equal("Unit Test Exception", result.Message);
+    }
+
+    [Fact]
+    public async Task GetApproversForInvoiceBySchemeAndAmount_ShouldReturnFailure_WhenSchemeNotFound()
+    {
+        // Arrange
+        var invoiceScheme = "XYZ";
+        var invoiceAmount = 2000M;
+
+        _schemeRepositoryMock.Setup(repository => repository.GetByCodeAsync(It.IsAny<string>()))
+            .ReturnsAsync((SchemeEntity)null);
+
+        // Act
+        var result = await _serviceToTest.GetApproversForInvoiceBySchemeAndAmountAsync(invoiceScheme, invoiceAmount);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.False(result.IsSuccess);
+        Assert.Null(result.Data);
+        Assert.Equal("Unable to find matching scheme", result.Message);
+    }
+
+    [Fact]
+    public async Task GetApproversForInvoiceBySchemeAndAmount_ShouldReturnFailure_WhenGradeNotFound()
+    {
+        // Arrange
+        var invoiceScheme = "ABC";
+        var invoiceAmount = 10000M;
+
+        _gradeRepositoryMock.Setup(repository => repository.GetByApprovalLimit(It.IsAny<decimal>()))
+            .ReturnsAsync((GradeEntity)null);
+
+        // Act
+        var result = await _serviceToTest.GetApproversForInvoiceBySchemeAndAmountAsync(invoiceScheme, invoiceAmount);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.False(result.IsSuccess);
+        Assert.Null(result.Data);
+        Assert.Equal("Unable to find matching grade", result.Message);
+    }
+
+    [Fact]
+    public async Task GetApproversForInvoiceBySchemeAndAmount_ShouldReturnFailure_WhenApproverNotFound()
+    {
+        // Arrange
+        var invoiceScheme = "ABC";
+        var invoiceAmount = 2000M;
+
+        _approverRepositoryMock.Setup(repository => repository.GetApproversByIdsAsync(It.IsAny<IEnumerable<int>>()))
+            .ReturnsAsync(new List<ApproverEntity>());
+
+        // Act
+        var result = await _serviceToTest.GetApproversForInvoiceBySchemeAndAmountAsync(invoiceScheme, invoiceAmount);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.False(result.IsSuccess);
+        Assert.Null(result.Data);
+        Assert.Equal("Unable to find matching approvers", result.Message);
     }
 }
