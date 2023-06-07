@@ -15,6 +15,65 @@ This repo contains the MIT Approvals Api.
 ### Requirements
 * Git
 * .NET 6 SDK
+* PostgreSQL
+* **Optional:** Docker - Only needed if running PostgreSQL within container
+
+### PostgreSQL
+Execute the following commands to run Postgres inside a docker container:
+```ps
+docker pull postgres
+docker run --name approvals-postgres -p 127.0.0.1:5432:5432 -e POSTGRES_PASSWORD=approvalspassword -d est_mit_approvals
+```
+
+Or install a standalone instance using the following link:
+
+[PostgreSQL: Windows installers](https://www.postgresql.org/download/windows/)
+
+### EF Core Tools
+Follow this guide to install EF Core global tools:
+
+[Entity Framework Core tools reference - .NET Core CLI](https://learn.microsoft.com/en-us/ef/core/cli/dotnet)
+
+### Secret Configuration
+This project uses dotnet user-secrets to store connection strings.
+
+Use the following commands to init user-secrets in the project:
+
+```ps
+dotnet user-secrets init --project EST.MIT.Approvals.Api
+```
+
+Use the following command to set secrets:
+
+```ps
+dotnet user-secrets set "<Secret name>" "<Secret>"
+```
+
+The following secrets need to be set in the EST.MIT.Approvals.Api project:
+|Secret|Description|
+|------|-----------|
+|DbConnectionString|PostgreSQL connection string|
+
+The database connection should connect to a database called `est_mit_approvals`.
+
+#### Example Postgres Connection String
+```
+Server=127.0.0.1;Port=5432;Database=est_mit_approvals;User Id=<UserID>;Password=<Password>;
+```
+
+### Setup Database
+This project uses EF Core to handle database migrations. Run the following command to update migrations on database.
+
+```ps
+dotnet ef database update --project .\EST.MIT.Approvals.Api
+```
+
+#### Seeding Reference Data
+**Important**: The seed ref data function is a destructive process which deletes all rows in database before running seed operation. For this reason, the `--seed-ref-data` argument will only run in a dev environment.
+
+Reference data can be seeded to the database at application startup by using the `--seed-ref-data` argument.
+
+The source of the seed data is currently from 2022-23 Delegated Authorities Register v1.3 Blank CF. Any updates made to the Excel file after this version may not be reflected in the seed data.
 
 ### Starting Api
 ```ps
