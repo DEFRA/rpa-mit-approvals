@@ -13,20 +13,20 @@ public class InvoiceApproversServiceTest
 
     private readonly Mock<ISchemeRepository> _schemeRepositoryMock;
     private readonly Mock<IApproverRepository> _approverRepositoryMock;
-    private readonly Mock<ISchemeGradeApprovalRepository> _schemeGradeApprovalRepositoryMock;
+    private readonly Mock<ISchemeApprovalGradeRepository> _schemeGradeApprovalRepositoryMock;
     private readonly Mock<ILogger<InvoiceApproverService>> _loggerMock;
 
     private readonly SchemeEntity _scheme;
     private readonly GradeEntity _grade;
     private readonly SchemeGradeEntity _schemeGrade;
     private readonly ApproverEntity _approver;
-    private readonly SchemeGradeApprovalEntity _schemeGradeApproval;
+    private readonly SchemeApprovalGradeEntity _schemeApprovalGrade;
 
     public InvoiceApproversServiceTest()
     {
         this._schemeRepositoryMock = new Mock<ISchemeRepository>();
         this._approverRepositoryMock = new Mock<IApproverRepository>();
-        this._schemeGradeApprovalRepositoryMock = new Mock<ISchemeGradeApprovalRepository>();
+        this._schemeGradeApprovalRepositoryMock = new Mock<ISchemeApprovalGradeRepository>();
         this._loggerMock = new Mock<ILogger<InvoiceApproverService>>();
 
         this._scheme = new SchemeEntity()
@@ -59,17 +59,17 @@ public class InvoiceApproversServiceTest
             LastName = "One",
         };
 
-        this._approverRepositoryMock.Setup(repository => repository.GetApproversByBySchemeAndGradeAsync(It.IsAny<IEnumerable<int>>()))
+        this._approverRepositoryMock.Setup(repository => repository.GetApproversBySchemeAndGradeAsync(It.IsAny<IEnumerable<int>>()))
             .ReturnsAsync(() => new List<ApproverEntity>() { this._approver });
 
-        this._schemeGradeApproval = new SchemeGradeApprovalEntity()
+        this._schemeApprovalGrade = new SchemeApprovalGradeEntity()
         {
             Id = 1,
             SchemeGrade = _schemeGrade
         };
 
-        this._schemeGradeApprovalRepositoryMock.Setup(repository => repository.GetAllBySchemeGradesBySchemeAndApprovalLimit(It.IsAny<int>(), It.IsAny<decimal>()))
-            .ReturnsAsync(() => new List<SchemeGradeApprovalEntity>() { this._schemeGradeApproval });
+        this._schemeGradeApprovalRepositoryMock.Setup(repository => repository.GetAllBySchemeAndApprovalLimit(It.IsAny<int>(), It.IsAny<decimal>()))
+            .ReturnsAsync(() => new List<SchemeApprovalGradeEntity>() { this._schemeApprovalGrade });
 
         this._serviceToTest = new InvoiceApproverService(this._schemeRepositoryMock.Object, this._approverRepositoryMock.Object, this._schemeGradeApprovalRepositoryMock.Object, this._loggerMock.Object);
     }
@@ -166,7 +166,7 @@ public class InvoiceApproversServiceTest
         var invoiceScheme = "ABC";
         var invoiceAmount = 2000M;
 
-        _approverRepositoryMock.Setup(repository => repository.GetApproversByBySchemeAndGradeAsync(It.IsAny<IEnumerable<int>>()))
+        _approverRepositoryMock.Setup(repository => repository.GetApproversBySchemeAndGradeAsync(It.IsAny<IEnumerable<int>>()))
             .ReturnsAsync(new List<ApproverEntity>());
 
         // Act

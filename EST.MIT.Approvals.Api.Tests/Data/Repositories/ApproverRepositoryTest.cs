@@ -41,7 +41,7 @@ public class ApproverRepositoryTests
         var ids = new List<int> { 1, 3 };
 
         // Act
-        var result = await _approverRepository.GetApproversByBySchemeAndGradeAsync(ids);
+        var result = await _approverRepository.GetApproversBySchemeAndGradeAsync(ids);
 
         // Assert
         var approverEntities = result.ToList();

@@ -3,6 +3,8 @@ using EST.MIT.Approvals.Api.Data.Repositories;
 using EST.MIT.Approvals.Api.Data.Repositories.Interfaces;
 using EST.MIT.Approvals.Api.Services;
 using EST.MIT.Approvals.Api.Services.Interfaces;
+using EST.MIT.Approvals.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace EST.MIT.Approvals.Api.endpoints;
 
@@ -18,7 +20,7 @@ public static class ApprovalsDefinition
         services.AddScoped<IApproverRepository, ApproverRepository>();
         services.AddScoped<IGradeRepository, GradeRepository>();
         services.AddScoped<ISchemeRepository, SchemeRepository>();
-        services.AddScoped<ISchemeGradeApprovalRepository, SchemeGradeApprovalRepository>();
+        services.AddScoped<ISchemeApprovalGradeRepository, SchemeApprovalGradeRepository>();
 
         return services;
     }

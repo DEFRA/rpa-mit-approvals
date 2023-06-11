@@ -8,18 +8,18 @@ public class InvoiceApproverService : IInvoiceApproverService
 {
     private readonly ISchemeRepository _schemeRepository;
     private readonly IApproverRepository _approverRepository;
-    private readonly ISchemeGradeApprovalRepository _schemeGradeApprovalRepository;
+    private readonly ISchemeApprovalGradeRepository _schemeApprovalGradeRepository;
     private readonly ILogger<InvoiceApproverService> _logger;
 
     public InvoiceApproverService(
         ISchemeRepository schemeRepository,
         IApproverRepository approverRepository,
-        ISchemeGradeApprovalRepository schemeGradeApproverRepository,
+        ISchemeApprovalGradeRepository schemeApprovalGradeApproverRepository,
         ILogger<InvoiceApproverService> logger)
     {
         _schemeRepository = schemeRepository;
         _approverRepository = approverRepository;
-        _schemeGradeApprovalRepository = schemeGradeApproverRepository;
+        _schemeApprovalGradeRepository = schemeApprovalGradeApproverRepository;
         _logger = logger;
     }
 
@@ -38,16 +38,16 @@ public class InvoiceApproverService : IInvoiceApproverService
             }
 
 
-            var schemeGradeApprovals = await this._schemeGradeApprovalRepository.GetAllBySchemeGradesBySchemeAndApprovalLimit(scheme.Id, invoiceAmount);
-            var schemeGradeApprovalEntities = schemeGradeApprovals.ToList();
+            var schemeApprovalGrades = await this._schemeApprovalGradeRepository.GetAllBySchemeAndApprovalLimit(scheme.Id, invoiceAmount);
+            var schemeApprovalGradeEntities = schemeApprovalGrades.ToList();
 
-            if (!schemeGradeApprovalEntities.Any())
+            if (!schemeApprovalGradeEntities.Any())
             {
                 returnValue.Message = "Unable to find matching scheme and approval grades";
                 return returnValue;
             }
 
-            var approvers = await this._approverRepository.GetApproversByBySchemeAndGradeAsync(schemeGradeApprovalEntities.Select(x => x.SchemeGrade.Id));
+            var approvers = await this._approverRepository.GetApproversBySchemeAndGradeAsync(schemeApprovalGradeEntities.Select(x => x.SchemeGrade.Id));
 
             var approverEntities = approvers.ToList();
             if (!approverEntities.Any())

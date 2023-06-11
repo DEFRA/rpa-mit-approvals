@@ -3,15 +3,15 @@ using EST.MIT.Approvals.Data.Models;
 
 namespace EST.MIT.Approvals.Api.Data.Repositories;
 
-public class SchemeGradeApprovalRepository : Repository<SchemeGradeApprovalEntity>, ISchemeGradeApprovalRepository
+public class SchemeApprovalGradeRepository : Repository<SchemeApprovalGradeEntity>, ISchemeApprovalGradeRepository
 {
 
-    public SchemeGradeApprovalRepository()
+    public SchemeApprovalGradeRepository()
         : base()
     {
-        var entities = new List<SchemeGradeApprovalEntity>()
+        var entities = new List<SchemeApprovalGradeEntity>()
         {
-            new SchemeGradeApprovalEntity()
+            new SchemeApprovalGradeEntity()
             {
                 Id = 1,
                 SchemeGrade = new SchemeGradeEntity()
@@ -39,7 +39,7 @@ public class SchemeGradeApprovalRepository : Repository<SchemeGradeApprovalEntit
         this.Initialise(entities);
     }
 
-    public async Task<IEnumerable<SchemeGradeApprovalEntity>> GetAllBySchemeGradesBySchemeAndApprovalLimit(int schemeId, decimal approvalLimit)
+    public async Task<IEnumerable<SchemeApprovalGradeEntity>> GetAllBySchemeAndApprovalLimit(int schemeId, decimal approvalLimit)
     {
         var all = await this.GetAllAsync();
 

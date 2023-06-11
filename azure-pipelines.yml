@@ -22,7 +22,7 @@ steps:
     projectName: 'EST.MIT.Approvals'
     extraProperties: |
       sonar.exclusions=**/obj/**,**/*.dll,**/*.cshtml,**/*.css,**/*.js,**/*.json,**/wwwroot/**,**/EST.MIT.Approvals.Api.Tests/**,**/Program.cs
-      sonar.test.exclusions=**/obj/**,**/*.dll,**/*.cshtml,**/*.css,**/*.js,**/*.json,**/wwwroot/**,**/EST.MIT.Approvals.Api.Tests/**
+      sonar.test.exclusions=**/obj/**,**/*.dll,**/*.cshtml,**/*.css,**/*.js,**/*.json,**/wwwroot/**,**/EST.MIT.Approvals.Api.Tests/**,,**/EST.MIT.Approvals.Api.Data/**
       sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.opencover.xml
       $(additionalSonarParams)
 

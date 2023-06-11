@@ -46,7 +46,7 @@ public class ApproverRepository : Repository<ApproverEntity>, IApproverRepositor
         };
         this.Initialise(approvers);
     }
-    public async Task<IEnumerable<ApproverEntity>> GetApproversByBySchemeAndGradeAsync(IEnumerable<int> schemeGradeIds)
+    public async Task<IEnumerable<ApproverEntity>> GetApproversBySchemeAndGradeAsync(IEnumerable<int> schemeGradeIds)
     {
         var all = await this.GetAllAsync();
 

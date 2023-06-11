@@ -12,7 +12,7 @@ public class SchemeGradeApprovalEntityTests
     [Fact]
     public void SchemeGradeApprovalEntity_SetProperties_ShouldSetCorrectly()
     {
-        var entity = new SchemeGradeApprovalEntity
+        var entity = new SchemeApprovalGradeEntity
         {
             Id = 1,
             SchemeGrade = new SchemeGradeEntity()

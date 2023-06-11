@@ -15,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Data\Repositories\SchemeGradeApprovalRepository.cs" />
-    <Compile Include="Data\Repositories\Interfaces\ISchemeGradeApprovalRepository.cs" />
+    <Compile Include="Data\Repositories\SchemeApprovalGradeRepository.cs" />
+    <Compile Include="Data\Repositories\Interfaces\ISchemeApprovalGradeRepository.cs" />
     <Compile Include="Data\Repositories\SchemeRepository.cs" />
     <Compile Include="Data\Repositories\GradeRepository.cs" />
     <Compile Include="Data\Repositories\Interfaces\ISchemeRepository.cs" />
@@ -39,6 +39,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EST.MIT.Approvals.Data\EST.MIT.Approvals.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Extensions\" />
   </ItemGroup>
 
 </Project>

@@ -3,7 +3,7 @@
 namespace EST.MIT.Approvals.Data.Models;
 
 [ExcludeFromCodeCoverage]
-public class SchemeGradeApprovalEntity : BaseEntity
+public class SchemeApprovalGradeEntity : BaseEntity
 {
     public SchemeGradeEntity SchemeGrade { get; set; } = default!;
 

@@ -4,5 +4,5 @@ namespace EST.MIT.Approvals.Api.Data.Repositories.Interfaces;
 
 public interface IApproverRepository : IRepository<ApproverEntity>
 {
-    Task<IEnumerable<ApproverEntity>> GetApproversByBySchemeAndGradeAsync(IEnumerable<int> schemeGradeIds);
+    Task<IEnumerable<ApproverEntity>> GetApproversBySchemeAndGradeAsync(IEnumerable<int> schemeGradeIds);
 }

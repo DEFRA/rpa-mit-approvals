@@ -5,6 +5,19 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+Console.WriteLine($"DBConnectionString: {builder.Configuration["DbConnectionString"]}");
+
+builder.Services.AddDbContext<ApprovalsContext>(options =>
+{
+    options
+        .UseNpgsql(
+            builder.Configuration["DbConnectionString"],
+            x => x.MigrationsAssembly("EST.MIT.Approvals.Data")
+        )
+        .UseSnakeCaseNamingConvention();
+});
+
+
 builder.Services.AddSwaggerServices();
 builder.Services.AddApprovalsServices();
 
