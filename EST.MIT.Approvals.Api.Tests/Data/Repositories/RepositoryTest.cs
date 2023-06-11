@@ -1,15 +1,13 @@
-﻿using Approvals.Api.Data.Entities;
-using Approvals.Api.Data.Repositories;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
-using Approvals.Api.Data.Entities;
-using Approvals.Api.Data.Repositories;
 using System.Linq;
 using System.Threading.Tasks;
+using EST.MIT.Approvals.Api.Data.Repositories;
+using EST.MIT.Approvals.Data.Models;
 
 namespace EST.MIT.Approvals.Api.Tests.Data.Repositories;
 

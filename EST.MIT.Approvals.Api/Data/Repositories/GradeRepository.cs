@@ -1,7 +1,7 @@
-﻿using Approvals.Api.Data.Entities;
-using EST.MIT.Approvals.Api.Data.Repositories.Interfaces;
+﻿using EST.MIT.Approvals.Api.Data.Repositories.Interfaces;
+using EST.MIT.Approvals.Data.Models;
 
-namespace Approvals.Api.Data.Repositories;
+namespace EST.MIT.Approvals.Api.Data.Repositories;
 
 public class GradeRepository : Repository<GradeEntity>, IGradeRepository
 {
@@ -9,37 +9,30 @@ public class GradeRepository : Repository<GradeEntity>, IGradeRepository
     public GradeRepository()
         : base()
     {
-        var grades = new List<GradeEntity>()
+        var entities = new List<GradeEntity>()
         {
             new GradeEntity()
             {
                 Id = 1,
-                ApprovalLimit = 1000,
-                Name = "Low",
-                Description = "Low",
+                Code = "G1",
+                Name = "Grade 1",
+                Description = "This is the description for Grade 1",
             },
             new GradeEntity()
             {
                 Id = 2,
-                ApprovalLimit = 5000,
-                Name = "Medium",
-                Description = "Medium",
+                Code = "G2",
+                Name = "Grade 2",
+                Description = "This is the description for Grade 2",
             },
             new GradeEntity()
             {
                 Id = 3,
-                ApprovalLimit = 10000,
-                Name = "High",
-                Description = "High",
+                Code = "G3",
+                Name = "Grade 3",
+                Description = "This is the description for Grade 3",
             },
         };
-        this.Initialise(grades);
-    }
-
-    public async Task<GradeEntity?> GetByApprovalLimit(decimal approvalLimit)
-    {
-        var all = await this.GetAllAsync();
-
-        return all.FirstOrDefault(x => x.ApprovalLimit >= approvalLimit);
+        this.Initialise(entities);
     }
 }

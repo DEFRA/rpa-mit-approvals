@@ -1,7 +1,7 @@
-﻿using Approvals.Api.Data.Entities;
-using EST.MIT.Approvals.Api.Data.Repositories.Interfaces;
+﻿using EST.MIT.Approvals.Api.Data.Repositories.Interfaces;
+using EST.MIT.Approvals.Data.Models;
 
-namespace Approvals.Api.Data.Repositories;
+namespace EST.MIT.Approvals.Api.Data.Repositories;
 
 public abstract class Repository<T> : IRepository<T> where T : BaseEntity
 {

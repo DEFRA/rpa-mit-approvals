@@ -1,21 +1,21 @@
-﻿using Approvals.Api.Data.Repositories;
+﻿using EST.MIT.Approvals.Api.Data.Repositories;
 
 namespace EST.MIT.Approvals.Api.Tests.Data.Repositories;
 
 public class SchemeGradeApproverRepositoryTests
 {
-    private readonly SchemeGradeApproverRepository _schemeGradeApproverRepository;
+    private readonly SchemeGradeApprovalRepository _schemeGradeApprovalRepository;
 
     public SchemeGradeApproverRepositoryTests()
     {
-        _schemeGradeApproverRepository = new SchemeGradeApproverRepository();
+        _schemeGradeApprovalRepository = new SchemeGradeApprovalRepository();
     }
 
     [Fact]
     public async Task GetAllAsync_ShouldReturnAllSchemeGradeApprovers()
     {
         // Act
-        var result = await _schemeGradeApproverRepository.GetAllAsync();
+        var result = await _schemeGradeApprovalRepository.GetAllAsync();
 
         // Assert
         Assert.Single(result);
@@ -25,48 +25,53 @@ public class SchemeGradeApproverRepositoryTests
     public async Task GetAsync_ShouldReturnCorrectSchemeGradeApprover()
     {
         // Act
-        var result = await _schemeGradeApproverRepository.GetAsync(1);
+        var result = await _schemeGradeApprovalRepository.GetAsync(1);
 
         // Assert
         Assert.NotNull(result);
         Assert.Equal(1, result.Id);
-        Assert.Equal(1, result.SchemeId);
-        Assert.Equal(1, result.GradeId);
-        Assert.Equal(1, result.ApproverId);
+        Assert.Equal(1, result.SchemeGrade?.Scheme?.Id);
+        Assert.Equal(1, result.SchemeGrade?.Grade?.Id);
+        Assert.False(result.IsUnlimited);
+        Assert.Equal(1000M, result.ApprovalLimit);
     }
 
     [Fact]
-    public async Task GetAllBySchemeAndGrade_ShouldReturnCorrectSchemeGradeApprovers()
+    public async Task GetAllBySchemeGradesBySchemeAndApprovalLimit_ShouldReturnCorrectSchemeGradeApprovers()
     {
         // Act
-        var result = await _schemeGradeApproverRepository.GetAllBySchemeAndGrade(1, 1);
+        var result = await _schemeGradeApprovalRepository.GetAllBySchemeGradesBySchemeAndApprovalLimit(1, 1);
 
         // Assert
-        Assert.Single(result);
-        var entity = result.First();
-        Assert.Equal(1, entity.SchemeId);
-        Assert.Equal(1, entity.GradeId);
+        var schemeGradeApprovalEntities = result.ToList();
+        Assert.Single(schemeGradeApprovalEntities);
+        var entity = schemeGradeApprovalEntities.First();
+        Assert.Equal(1, entity.Id);
+        Assert.Equal(1, entity.SchemeGrade?.Scheme?.Id);
+        Assert.Equal(1, entity.SchemeGrade?.Grade?.Id);
+        Assert.False(entity.IsUnlimited);
+        Assert.Equal(1000M, entity.ApprovalLimit);
     }
 
     [Fact]
     public async Task HardDeleteAsync_ShouldRemoveSchemeGradeApprover()
     {
         // Act
-        await _schemeGradeApproverRepository.HardDeleteAsync(1);
+        await _schemeGradeApprovalRepository.HardDeleteAsync(1);
 
         // Assert
-        Assert.Null(await _schemeGradeApproverRepository.GetAsync(1));
-        Assert.Empty(await _schemeGradeApproverRepository.GetAllAsync());
+        Assert.Null(await _schemeGradeApprovalRepository.GetAsync(1));
+        Assert.Empty(await _schemeGradeApprovalRepository.GetAllAsync());
     }
 
     [Fact]
     public async Task SoftDeleteAsync_ShouldMarkSchemeGradeApproverAsDeleted()
     {
         // Act
-        await _schemeGradeApproverRepository.SoftDeleteAsync(1);
+        await _schemeGradeApprovalRepository.SoftDeleteAsync(1);
 
         // Assert
-        var result = await _schemeGradeApproverRepository.GetAsync(1);
+        var result = await _schemeGradeApprovalRepository.GetAsync(1);
         Assert.NotNull(result);
         Assert.True(result.IsDeleted);
     }

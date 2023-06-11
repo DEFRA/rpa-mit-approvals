@@ -1,7 +1,7 @@
-﻿using Approvals.Api.Data.Entities;
-using EST.MIT.Approvals.Api.Data.Repositories.Interfaces;
+﻿using EST.MIT.Approvals.Api.Data.Repositories.Interfaces;
+using EST.MIT.Approvals.Data.Models;
 
-namespace Approvals.Api.Data.Repositories;
+namespace EST.MIT.Approvals.Api.Data.Repositories;
 
 public class ApproverRepository : Repository<ApproverEntity>, IApproverRepository
 {
@@ -15,29 +15,43 @@ public class ApproverRepository : Repository<ApproverEntity>, IApproverRepositor
                 Id = 1,
                 EmailAddress = "ApproverOne@defra.gov.uk",
                 FirstName = "Approver",
-                LastName = "One,"
+                LastName = "One,",
+                SchemeGrades = new List<SchemeGradeEntity>()
+                {
+                    new SchemeGradeEntity() { Id = 1 }
+                }
             },
             new ApproverEntity()
             {
                 Id = 2,
                 EmailAddress = "ApproverTwo@defra.gov.uk",
                 FirstName = "Approver",
-                LastName = "Two,"
+                LastName = "Two,",
+                SchemeGrades = new List<SchemeGradeEntity>()
+                {
+                    new SchemeGradeEntity() { Id = 2 }
+                }
             },
             new ApproverEntity()
             {
                 Id = 3,
                 EmailAddress = "ApproverThree@defra.gov.uk",
                 FirstName = "Approver",
-                LastName = "Three,"
-            }
+                LastName = "Three,",
+                SchemeGrades = new List<SchemeGradeEntity>()
+                {
+                    new SchemeGradeEntity() { Id = 3 }
+                }
+            },
         };
         this.Initialise(approvers);
     }
-    public async Task<IEnumerable<ApproverEntity>> GetApproversByIdsAsync(IEnumerable<int> ids)
+    public async Task<IEnumerable<ApproverEntity>> GetApproversByBySchemeAndGradeAsync(IEnumerable<int> schemeGradeIds)
     {
         var all = await this.GetAllAsync();
 
-        return all.Where(x => ids.Contains(x.Id));
+        // Return a list of all the approver that have at least one SchemeGrade object
+        // in the SchemeGrades collection that matches with the id passed in
+        return all.Where(x => x.SchemeGrades.Any(y => schemeGradeIds.Contains(y.Id)));
     }
 }

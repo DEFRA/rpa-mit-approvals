@@ -1,6 +1,10 @@
 using Approvals.Api.Endpoints;
+using EST.MIT.Approvals.Api.endpoints;
+using EST.MIT.Approvals.Data;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Services.AddSwaggerServices();
 builder.Services.AddApprovalsServices();
 

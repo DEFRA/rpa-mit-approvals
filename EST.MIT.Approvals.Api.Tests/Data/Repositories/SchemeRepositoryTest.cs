@@ -1,4 +1,4 @@
-﻿using Approvals.Api.Data.Repositories;
+﻿using EST.MIT.Approvals.Api.Data.Repositories;
 
 namespace EST.MIT.Approvals.Api.Tests.Data.Repositories;
 
@@ -30,19 +30,19 @@ public class SchemeRepositoryTests
         // Assert
         Assert.NotNull(result);
         Assert.Equal(2, result.Id);
-        Assert.Equal("B2", result.Code);
+        Assert.Equal("S2", result.Code);
     }
 
     [Fact]
     public async Task GetByCodeAsync_ShouldReturnCorrectScheme()
     {
         // Act
-        var result = await _schemeRepository.GetByCodeAsync("a1");
+        var result = await _schemeRepository.GetByCodeAsync("S1");
 
         // Assert
         Assert.NotNull(result);
         Assert.Equal(1, result.Id);
-        Assert.Equal("A1", result.Code);
+        Assert.Equal("S1", result.Code);
     }
 
     [Fact]
