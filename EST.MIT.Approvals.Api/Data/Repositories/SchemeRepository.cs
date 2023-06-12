@@ -1,38 +1,38 @@
-﻿using Approvals.Api.Data.Entities;
-using EST.MIT.Approvals.Api.Data.Repositories.Interfaces;
+﻿using EST.MIT.Approvals.Api.Data.Repositories.Interfaces;
+using EST.MIT.Approvals.Data.Models;
 
-namespace Approvals.Api.Data.Repositories;
+namespace EST.MIT.Approvals.Api.Data.Repositories;
 
 public class SchemeRepository : Repository<SchemeEntity>, ISchemeRepository
 {
     public SchemeRepository()
         : base()
     {
-        var grades = new List<SchemeEntity>()
+        var entities = new List<SchemeEntity>()
         {
             new SchemeEntity()
             {
                 Id = 1,
-                Code = "A1",
-                Name = "Project A1",
-                Description = "Project A1",
+                Code = "S1",
+                Name = "Scheme 1",
+                Description = "This is the description for Scheme 1",
             },
             new SchemeEntity()
             {
                 Id = 2,
-                Code = "B2",
-                Name = "Project B2",
-                Description = "Project B2",
+                Code = "S2",
+                Name = "Scheme 2",
+                Description = "This is the description for Scheme 2",
             },
             new SchemeEntity()
             {
                 Id = 3,
-                Code = "C3",
-                Name = "Project C3",
-                Description = "Project C3",
+                Code = "S3",
+                Name = "Scheme 3",
+                Description = "This is the description for Scheme 3",
             },
         };
-        this.Initialise(grades);
+        this.Initialise(entities);
     }
 
     public async Task<SchemeEntity?> GetByCodeAsync(string code)

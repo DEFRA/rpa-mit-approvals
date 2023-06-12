@@ -1,8 +1,8 @@
-﻿using Approvals.Api.Data.Entities;
+﻿using EST.MIT.Approvals.Data.Models;
 
 namespace EST.MIT.Approvals.Api.Data.Repositories.Interfaces;
 
 public interface IApproverRepository : IRepository<ApproverEntity>
 {
-    Task<IEnumerable<ApproverEntity>> GetApproversByIdsAsync(IEnumerable<int> ids);
+    Task<IEnumerable<ApproverEntity>> GetApproversBySchemeAndGradeAsync(IEnumerable<int> schemeGradeIds);
 }

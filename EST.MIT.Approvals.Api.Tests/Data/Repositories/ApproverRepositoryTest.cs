@@ -1,4 +1,4 @@
-﻿using Approvals.Api.Data.Repositories;
+﻿using EST.MIT.Approvals.Api.Data.Repositories;
 
 namespace EST.MIT.Approvals.Api.Tests.Data.Repositories;
 
@@ -41,12 +41,13 @@ public class ApproverRepositoryTests
         var ids = new List<int> { 1, 3 };
 
         // Act
-        var result = await _approverRepository.GetApproversByIdsAsync(ids);
+        var result = await _approverRepository.GetApproversBySchemeAndGradeAsync(ids);
 
         // Assert
-        Assert.Equal(2, result.Count());
-        Assert.Contains(result, a => a.Id == 1);
-        Assert.Contains(result, a => a.Id == 3);
+        var approverEntities = result.ToList();
+        Assert.Equal(2, approverEntities.Count);
+        Assert.Contains(approverEntities, a => a.Id == 1);
+        Assert.Contains(approverEntities, a => a.Id == 3);
     }
 
     [Fact]

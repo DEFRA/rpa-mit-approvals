@@ -1,5 +1,9 @@
-﻿namespace Approvals.Api.Data.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
+namespace EST.MIT.Approvals.Data.Models;
+
+[ExcludeFromCodeCoverage]
 public abstract class BaseEntity
 {
     protected BaseEntity()
@@ -8,6 +12,7 @@ public abstract class BaseEntity
         this.IsDeleted = false;
     }
 
+    [Key]
     public int Id { get; set; }
 
     public DateTime CreatedOn { get; set; }

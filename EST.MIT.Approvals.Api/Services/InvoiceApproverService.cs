@@ -1,29 +1,25 @@
 ﻿using Approvals.Api.Models;
 using EST.MIT.Approvals.Api.Data.Repositories.Interfaces;
 using EST.MIT.Approvals.Api.Services.Interfaces;
-using System;
 
-namespace Approvals.Api.Services;
+namespace EST.MIT.Approvals.Api.Services;
 
 public class InvoiceApproverService : IInvoiceApproverService
 {
     private readonly ISchemeRepository _schemeRepository;
-    private readonly IGradeRepository _gradeRepository;
     private readonly IApproverRepository _approverRepository;
-    private readonly ISchemeGradeApproverRepository _schemeGradeApproverRepository;
+    private readonly ISchemeApprovalGradeRepository _schemeApprovalGradeRepository;
     private readonly ILogger<InvoiceApproverService> _logger;
 
     public InvoiceApproverService(
         ISchemeRepository schemeRepository,
-        IGradeRepository gradeRepository,
         IApproverRepository approverRepository,
-        ISchemeGradeApproverRepository schemeGradeApproverRepository,
+        ISchemeApprovalGradeRepository schemeApprovalGradeApproverRepository,
         ILogger<InvoiceApproverService> logger)
     {
         _schemeRepository = schemeRepository;
-        _gradeRepository = gradeRepository;
         _approverRepository = approverRepository;
-        _schemeGradeApproverRepository = schemeGradeApproverRepository;
+        _schemeApprovalGradeRepository = schemeApprovalGradeApproverRepository;
         _logger = logger;
     }
 
@@ -34,7 +30,6 @@ public class InvoiceApproverService : IInvoiceApproverService
         try
         {
             var scheme = await this._schemeRepository.GetByCodeAsync(invoiceScheme);
-            var grade = await this._gradeRepository.GetByApprovalLimit(invoiceAmount);
 
             if (scheme == null)
             {
@@ -42,22 +37,17 @@ public class InvoiceApproverService : IInvoiceApproverService
                 return returnValue;
             }
 
-            if (grade == null)
+
+            var schemeApprovalGrades = await this._schemeApprovalGradeRepository.GetAllBySchemeAndApprovalLimit(scheme.Id, invoiceAmount);
+            var schemeApprovalGradeEntities = schemeApprovalGrades.ToList();
+
+            if (!schemeApprovalGradeEntities.Any())
             {
-                returnValue.Message = "Unable to find matching grade";
+                returnValue.Message = "Unable to find matching scheme and approval grades";
                 return returnValue;
             }
 
-            var schemeGradeApprovers = await this._schemeGradeApproverRepository.GetAllBySchemeAndGrade(scheme.Id, grade.Id);
-            var schemeGradeApproverEntities = schemeGradeApprovers.ToList();
-
-            if (!schemeGradeApproverEntities.Any())
-            {
-                returnValue.Message = "Unable to find matching scheme and grade approvers";
-                return returnValue;
-            }
-
-            var approvers = await this._approverRepository.GetApproversByIdsAsync(schemeGradeApproverEntities.Select(x => x.ApproverId));
+            var approvers = await this._approverRepository.GetApproversBySchemeAndGradeAsync(schemeApprovalGradeEntities.Select(x => x.SchemeGrade.Id));
 
             var approverEntities = approvers.ToList();
             if (!approverEntities.Any())

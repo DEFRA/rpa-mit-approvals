@@ -1,10 +1,12 @@
-﻿using Approvals.Api.Services;
-using System.Diagnostics.CodeAnalysis;
-using Approvals.Api.Data.Repositories;
-using EST.MIT.Approvals.Api.Services.Interfaces;
+﻿using System.Diagnostics.CodeAnalysis;
+using EST.MIT.Approvals.Api.Data.Repositories;
 using EST.MIT.Approvals.Api.Data.Repositories.Interfaces;
+using EST.MIT.Approvals.Api.Services;
+using EST.MIT.Approvals.Api.Services.Interfaces;
+using EST.MIT.Approvals.Data;
+using Microsoft.EntityFrameworkCore;
 
-namespace Approvals.Api.Endpoints;
+namespace EST.MIT.Approvals.Api.endpoints;
 
 [ExcludeFromCodeCoverage]
 public static class ApprovalsDefinition
@@ -18,7 +20,7 @@ public static class ApprovalsDefinition
         services.AddScoped<IApproverRepository, ApproverRepository>();
         services.AddScoped<IGradeRepository, GradeRepository>();
         services.AddScoped<ISchemeRepository, SchemeRepository>();
-        services.AddScoped<ISchemeGradeApproverRepository, SchemeGradeApproverRepository>();
+        services.AddScoped<ISchemeApprovalGradeRepository, SchemeApprovalGradeRepository>();
 
         return services;
     }

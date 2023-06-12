@@ -1,4 +1,4 @@
-﻿using Approvals.Api.Data.Repositories;
+﻿using EST.MIT.Approvals.Api.Data.Repositories;
 
 namespace EST.MIT.Approvals.Api.Tests.Data.Repositories;
 
@@ -30,19 +30,6 @@ public class GradeRepositoryTests
         // Assert
         Assert.NotNull(result);
         Assert.Equal(2, result.Id);
-        Assert.Equal(5000, result.ApprovalLimit);
-    }
-
-    [Fact]
-    public async Task GetByApprovalLimit_ShouldReturnCorrectGrade()
-    {
-        // Act
-        var result = await _gradeRepository.GetByApprovalLimit(6000);
-
-        // Assert
-        Assert.NotNull(result);
-        Assert.Equal(3, result.Id);
-        Assert.Equal(10000, result.ApprovalLimit);
     }
 
     [Fact]
