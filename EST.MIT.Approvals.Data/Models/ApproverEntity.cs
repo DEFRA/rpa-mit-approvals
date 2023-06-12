@@ -13,16 +13,14 @@ public class ApproverEntity : BaseEntity
 
     public ICollection<SchemeGradeEntity> SchemeGrades { get; set; } = default!;
 
-
     public ApproverEntity(string emailAddress, string firstName, string lastName)
     {
-        EmailAddress = emailAddress;
-        FirstName = firstName;
-        LastName = lastName;
+        this.EmailAddress = emailAddress;
+        this.FirstName = firstName;
+        this.LastName = lastName;
     }
-    
+
     public ApproverEntity()
     {
-        
     }
 }

@@ -43,7 +43,5 @@ public class SchemeGradeApprovalEntityTests
         Assert.Equal("S1", entity.SchemeGrade.Scheme.Code);
         Assert.Equal("Scheme 1", entity.SchemeGrade.Scheme.Name);
         Assert.Equal("This is the description for Scheme 1", entity.SchemeGrade.Scheme.Description);
-        
     }
-
 }

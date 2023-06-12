@@ -27,8 +27,4 @@ public class ApprovalsContext : DbContext
     public ApprovalsContext(DbContextOptions<ApprovalsContext> options) : base(options)
     {
     }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-    }
 }

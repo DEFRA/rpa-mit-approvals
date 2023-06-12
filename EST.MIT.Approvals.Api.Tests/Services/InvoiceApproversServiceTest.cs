@@ -158,6 +158,26 @@ public class InvoiceApproversServiceTest
         Assert.Equal("Unable to find matching scheme", result.Message);
     }
 
+    [Fact]
+    public async Task GetApproversForInvoiceBySchemeAndAmount_ShouldReturnFailure_WhenNoSchemeSchemeApprovalGradesFound()
+    {
+        // Arrange
+        var invoiceScheme = "XYZ";
+        var invoiceAmount = 2000M;
+
+        _schemeGradeApprovalRepositoryMock.Setup(repository => repository.GetAllBySchemeAndApprovalLimit(It.IsAny<int>(), It.IsAny<decimal>()))
+            .ReturnsAsync(new List<SchemeApprovalGradeEntity>());
+
+        // Act
+        var result = await _serviceToTest.GetApproversForInvoiceBySchemeAndAmountAsync(invoiceScheme, invoiceAmount);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.False(result.IsSuccess);
+        Assert.Null(result.Data);
+        Assert.Equal("Unable to find matching scheme and approval grades", result.Message);
+    }
+
 
     [Fact]
     public async Task GetApproversForInvoiceBySchemeAndAmount_ShouldReturnFailure_WhenApproverNotFound()
