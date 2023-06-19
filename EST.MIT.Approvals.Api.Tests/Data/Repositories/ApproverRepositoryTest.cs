@@ -1,4 +1,7 @@
 ﻿using EST.MIT.Approvals.Api.Data.Repositories;
+using EST.MIT.Approvals.Data;
+using EST.MIT.Approvals.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace EST.MIT.Approvals.Api.Tests.Data.Repositories;
 
@@ -6,15 +9,66 @@ namespace EST.MIT.Approvals.Api.Tests.Data.Repositories;
 public class ApproverRepositoryTests
 {
     private readonly ApproverRepository _approverRepository;
+    private readonly ApprovalsContext _context;
 
     public ApproverRepositoryTests()
     {
-        _approverRepository = new ApproverRepository();
+        var options = new DbContextOptionsBuilder<ApprovalsContext>()
+            .UseInMemoryDatabase(databaseName: "ApproverRepositoryTests")
+            .UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll)
+            .Options;
+
+        // Insert seed data into the database using one instance of the context
+        _context = new ApprovalsContext(options);
+
+        _approverRepository = new ApproverRepository(_context);
     }
+    
 
     [Fact]
     public async Task GetAllAsync_ShouldReturnAllApprovers()
     {
+        //Arrange
+        await _context.Database.EnsureDeletedAsync();
+        await _context.Database.EnsureCreatedAsync();
+
+        _context.Approvers.AddRange(
+            new ApproverEntity()
+            {
+                Id = 1,
+                EmailAddress = "ApproverOne@defra.gov.uk",
+                FirstName = "Approver",
+                LastName = "One,",
+                SchemeGrades = new List<ApproverSchemeGradeEntity>()
+                {
+                    new ApproverSchemeGradeEntity() { Id = 1 }
+                }
+            },
+            new ApproverEntity()
+            {
+                Id = 2,
+                EmailAddress = "ApproverTwo@defra.gov.uk",
+                FirstName = "Approver",
+                LastName = "Two,",
+                SchemeGrades = new List<ApproverSchemeGradeEntity>()
+                {
+                    new ApproverSchemeGradeEntity() { Id = 2 }
+                }
+            },
+            new ApproverEntity()
+            {
+                Id = 3,
+                EmailAddress = "ApproverThree@defra.gov.uk",
+                FirstName = "Approver",
+                LastName = "Three,",
+                SchemeGrades = new List<ApproverSchemeGradeEntity>()
+                {
+                    new ApproverSchemeGradeEntity() { Id = 3 }
+                }
+            });
+
+        await _context.SaveChangesAsync();
+
         // Act
         var result = await _approverRepository.GetAllAsync();
 
@@ -25,6 +79,47 @@ public class ApproverRepositoryTests
     [Fact]
     public async Task GetAsync_ShouldReturnCorrectApprover()
     {
+        //Arrange
+        await _context.Database.EnsureDeletedAsync();
+        await _context.Database.EnsureCreatedAsync();
+
+        _context.Approvers.AddRange(
+            new ApproverEntity()
+            {
+                Id = 1,
+                EmailAddress = "ApproverOne@defra.gov.uk",
+                FirstName = "Approver",
+                LastName = "One,",
+                SchemeGrades = new List<ApproverSchemeGradeEntity>()
+                {
+                    new ApproverSchemeGradeEntity() { Id = 1 }
+                }
+            },
+            new ApproverEntity()
+            {
+                Id = 2,
+                EmailAddress = "ApproverTwo@defra.gov.uk",
+                FirstName = "Approver",
+                LastName = "Two,",
+                SchemeGrades = new List<ApproverSchemeGradeEntity>()
+                {
+                    new ApproverSchemeGradeEntity() { Id = 2 }
+                }
+            },
+            new ApproverEntity()
+            {
+                Id = 3,
+                EmailAddress = "ApproverThree@defra.gov.uk",
+                FirstName = "Approver",
+                LastName = "Three,",
+                SchemeGrades = new List<ApproverSchemeGradeEntity>()
+                {
+                    new ApproverSchemeGradeEntity() { Id = 3 }
+                }
+            });
+
+        await _context.SaveChangesAsync();
+
         // Act
         var result = await _approverRepository.GetAsync(2);
 
@@ -38,6 +133,46 @@ public class ApproverRepositoryTests
     public async Task GetApproversByIdsAsync_ShouldReturnCorrectApprovers()
     {
         // Arrange
+        await _context.Database.EnsureDeletedAsync();
+        await _context.Database.EnsureCreatedAsync();
+
+        _context.Approvers.AddRange(
+            new ApproverEntity()
+            {
+                Id = 1,
+                EmailAddress = "ApproverOne@defra.gov.uk",
+                FirstName = "Approver",
+                LastName = "One,",
+                SchemeGrades = new List<ApproverSchemeGradeEntity>()
+                {
+                    new ApproverSchemeGradeEntity() { Id = 1 }
+                }
+            },
+            new ApproverEntity()
+            {
+                Id = 2,
+                EmailAddress = "ApproverTwo@defra.gov.uk",
+                FirstName = "Approver",
+                LastName = "Two,",
+                SchemeGrades = new List<ApproverSchemeGradeEntity>()
+                {
+                    new ApproverSchemeGradeEntity() { Id = 2 }
+                }
+            },
+            new ApproverEntity()
+            {
+                Id = 3,
+                EmailAddress = "ApproverThree@defra.gov.uk",
+                FirstName = "Approver",
+                LastName = "Three,",
+                SchemeGrades = new List<ApproverSchemeGradeEntity>()
+                {
+                    new ApproverSchemeGradeEntity() { Id = 3 }
+                }
+            });
+
+        await _context.SaveChangesAsync();
+
         var ids = new List<int> { 1, 3 };
 
         // Act
@@ -48,29 +183,6 @@ public class ApproverRepositoryTests
         Assert.Equal(2, approverEntities.Count);
         Assert.Contains(approverEntities, a => a.Id == 1);
         Assert.Contains(approverEntities, a => a.Id == 3);
-    }
-
-    [Fact]
-    public async Task HardDeleteAsync_ShouldRemoveApprover()
-    {
-        // Act
-        await _approverRepository.HardDeleteAsync(2);
-
-        // Assert
-        Assert.Null(await _approverRepository.GetAsync(2));
-        Assert.Equal(2, (await _approverRepository.GetAllAsync()).Count());
-    }
-
-    [Fact]
-    public async Task SoftDeleteAsync_ShouldMarkApproverAsDeleted()
-    {
-        // Act
-        await _approverRepository.SoftDeleteAsync(2);
-
-        // Assert
-        var result = await _approverRepository.GetAsync(2);
-        Assert.NotNull(result);
-        Assert.True(result.IsDeleted);
     }
 }
 

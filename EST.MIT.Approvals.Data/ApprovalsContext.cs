@@ -23,6 +23,8 @@ public class ApprovalsContext : DbContext
 
     public DbSet<SchemeApprovalGradeEntity> SchemeApprovalGrades => Set<SchemeApprovalGradeEntity>();
 
+    public DbSet<ApproverSchemeGradeEntity> ApproverSchemeGrades => Set<ApproverSchemeGradeEntity>();
+
 
     public ApprovalsContext(DbContextOptions<ApprovalsContext> options) : base(options)
     {
