@@ -42,7 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Extensions\" />
+    <Folder Include="Resources\SeedData\" />
   </ItemGroup>
 
 </Project>
