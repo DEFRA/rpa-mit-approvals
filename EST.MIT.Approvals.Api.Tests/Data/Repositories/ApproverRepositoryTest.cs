@@ -23,7 +23,6 @@ public class ApproverRepositoryTests
 
         _approverRepository = new ApproverRepository(_context);
     }
-    
 
     [Fact]
     public async Task GetAllAsync_ShouldReturnAllApprovers()
