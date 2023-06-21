@@ -1,4 +1,6 @@
 ﻿using EST.MIT.Approvals.Data.Models;
+using System.Linq.Expressions;
+using System;
 
 namespace EST.MIT.Approvals.Api.Data.Repositories.Interfaces;
 
@@ -7,15 +9,5 @@ public interface IRepository<T>
 {
     Task<IEnumerable<T>> GetAllAsync();
 
-    Task HardDeleteAsync(int id);
-
-    Task SoftDeleteAsync(int id);
-
     Task<T?> GetAsync(int id);
-
-    Task<int> InsertRangeAsync(IEnumerable<T> list);
-
-    Task UpdateAsync(T t);
-
-    Task<int> InsertAsync(T t);
 }

@@ -3,14 +3,13 @@
 namespace EST.MIT.Approvals.Data.Models;
 
 [ExcludeFromCodeCoverage]
-public class SchemeApprovalGradeEntity : BaseEntity
+public class ApproverSchemeGradeEntity : BaseEntity
 {
-    public decimal ApprovalLimit { get; init; } = default!;
-
-    public bool IsUnlimited { get; init; } = default!;
-
+    public int ApproverId { get; init; }
 
     public int SchemeGradeId { get; init; }
+
+    public ApproverEntity Approver { get; set; } = default!;
 
     public SchemeGradeEntity SchemeGrade { get; set; } = default!;
 }

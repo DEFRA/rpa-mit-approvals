@@ -22,17 +22,13 @@ public class BaseEntityTests
         {
             Id = 1,
             CreatedOn = now,
-            CreatedByUserId = 100,
             ModifiedOn = now,
-            ModifiedByUserId = 200,
             IsDeleted = false
         };
 
         Assert.Equal(1, entity.Id);
         Assert.Equal(now, entity.CreatedOn);
-        Assert.Equal(100, entity.CreatedByUserId);
         Assert.Equal(now, entity.ModifiedOn);
-        Assert.Equal(200, entity.ModifiedByUserId);
         Assert.False(entity.IsDeleted);
     }
 

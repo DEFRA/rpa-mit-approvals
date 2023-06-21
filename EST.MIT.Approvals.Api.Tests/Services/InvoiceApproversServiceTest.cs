@@ -146,7 +146,7 @@ public class InvoiceApproversServiceTest
         var invoiceAmount = 2000M;
 
         _schemeRepositoryMock.Setup(repository => repository.GetByCodeAsync(It.IsAny<string>()))
-            .ReturnsAsync((SchemeEntity)null);
+            .ReturnsAsync(null as SchemeEntity);
 
         // Act
         var result = await _serviceToTest.GetApproversForInvoiceBySchemeAndAmountAsync(invoiceScheme, invoiceAmount);
