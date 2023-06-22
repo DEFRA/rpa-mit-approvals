@@ -5,15 +5,19 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Approvals.Api.Endpoints;
 
-public static class InvoiceApproversGetEndpoints
+public static class InvoiceApprovalEndpoints
 {
     [ExcludeFromCodeCoverage]
-    public static IEndpointRouteBuilder MapInvoiceApproversGetEndpoints(this IEndpointRouteBuilder app)
+    public static IEndpointRouteBuilder MapInvoiceApprovalsEndpoints(this IEndpointRouteBuilder app)
     {
         app.MapGet("/approvals/invoiceapprovers", ([FromServices] IInvoiceApproverService invoiceApproverService, string invoiceScheme, decimal invoiceAmount) => GetApproversForInvoiceBySchemeAndAmountAsync(invoiceApproverService, invoiceScheme, invoiceAmount))
             .Produces<IEnumerable<InvoiceApprover>>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest)
             .WithName("GetApproversForInvoiceBySchemeAndAmount");
+
+        app.MapPost("/approvals/approver/validate", (ValidateApprover validateApprover, [FromServices] IInvoiceApproverService invoiceApproverService) => ValidateApprover())
+            .Produces(StatusCodes.Status200OK)
+            .WithName("ValidateApprover");
 
         return app;
     }
@@ -33,6 +37,11 @@ public static class InvoiceApproversGetEndpoints
         }
 
         return Results.Ok(response.Data);
+    }
+
+    public static IResult ValidateApprover()
+    {
+        return Results.Ok();
     }
 
 }

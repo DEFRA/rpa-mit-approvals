@@ -31,6 +31,6 @@ if (app.Environment.IsDevelopment() && args.Contains("--seed-ref-data"))
 
 app.SwaggerEndpoints();
 app.MapHealthCheckGetEndpoints();
-app.MapInvoiceApproversGetEndpoints();
+app.MapInvoiceApprovalsEndpoints();
 
 app.Run();
