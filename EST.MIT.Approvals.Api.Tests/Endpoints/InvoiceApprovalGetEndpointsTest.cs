@@ -7,13 +7,13 @@ using NSubstitute;
 
 namespace Approvals.Api.Tests.Endpoints;
 
-public class InvoiceApproversGetEndpointsTest
+public class InvoiceApprovalGetEndpointsTest
 {
     private readonly IInvoiceApproverService _invoiceApproverServiceMock =
         Substitute.For<IInvoiceApproverService>();
 
     [Fact]
-    public async Task InvoiceApproversGetEndpoint_GetApproversForInvoiceBySchemeAndAmount_ShouldReturn200AndPayload()
+    public async Task InvoiceApprovalGetEndpoint_GetApproversForInvoiceBySchemeAndAmount_ShouldReturn200AndPayload()
     {
         var invoiceScheme = "ABC";
         var invoiceAmount = 2000M;
@@ -33,7 +33,7 @@ public class InvoiceApproversGetEndpointsTest
                 IsSuccess = true,
             });
 
-        var result = await InvoiceApproversGetEndpoints.GetApproversForInvoiceBySchemeAndAmountAsync(this._invoiceApproverServiceMock, invoiceScheme, invoiceAmount);
+        var result = await InvoiceApprovalEndpoints.GetApproversForInvoiceBySchemeAndAmountAsync(this._invoiceApproverServiceMock, invoiceScheme, invoiceAmount);
 
         Assert.NotNull(result);
 
@@ -61,7 +61,7 @@ public class InvoiceApproversGetEndpointsTest
     }
 
     [Fact]
-    public async Task InvoiceApproversGetEndpoint_GetApproversForInvoiceBySchemeAndAmount_ShouldReturn404()
+    public async Task InvoiceApprovalGetEndpoint_GetApproversForInvoiceBySchemeAndAmount_ShouldReturn404()
     {
         var invoiceScheme = "ABC";
         var invoiceAmount = 2000M;
@@ -73,14 +73,14 @@ public class InvoiceApproversGetEndpointsTest
                 IsSuccess = true,
             });
 
-        var result = await InvoiceApproversGetEndpoints.GetApproversForInvoiceBySchemeAndAmountAsync(this._invoiceApproverServiceMock, invoiceScheme, invoiceAmount);
+        var result = await InvoiceApprovalEndpoints.GetApproversForInvoiceBySchemeAndAmountAsync(this._invoiceApproverServiceMock, invoiceScheme, invoiceAmount);
 
         Assert.NotNull(result);
         result.GetNotFoundResultStatusCode().Should().Be(404);
     }
 
     [Fact]
-    public async Task InvoiceApproversGetEndpoint_GetApproversForInvoiceBySchemeAndAmount_ShouldReturn400AndMessage()
+    public async Task InvoiceApprovalGetEndpoint_GetApproversForInvoiceBySchemeAndAmount_ShouldReturn400AndMessage()
     {
         var invoiceScheme = "ABC";
         var invoiceAmount = 2000M;
@@ -94,7 +94,7 @@ public class InvoiceApproversGetEndpointsTest
                 IsSuccess = false,
             });
 
-        var result = await InvoiceApproversGetEndpoints.GetApproversForInvoiceBySchemeAndAmountAsync(this._invoiceApproverServiceMock, invoiceScheme, invoiceAmount);
+        var result = await InvoiceApprovalEndpoints.GetApproversForInvoiceBySchemeAndAmountAsync(this._invoiceApproverServiceMock, invoiceScheme, invoiceAmount);
 
         Assert.NotNull(result);
 

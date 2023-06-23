@@ -2,7 +2,6 @@
   "profiles": {
     "EST.MIT.Approvals.Api": {
       "commandName": "Project",
-      "commandLineArgs": "--seed-ref-data",
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {

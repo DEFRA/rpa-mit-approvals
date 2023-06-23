@@ -133,3 +133,21 @@ Retrieves a status message.
 "Approvals.Api Endpoint up and running @22/05/2023 06:49:18"
 ```
 
+
+### POST Endpoints
+
+`POST /approvals/approver/validate`
+Payload Example
+
+```json
+[
+  {
+    "scheme": "ES",
+    "approverEmailAddress": "ApproverOne@defra.gov.uk"
+  }
+]
+```
+
+For now will always return a 200 response with no payload.
+But future aim is to validate the email address specified and that the email has a link to the scheme specified.
+
