@@ -32,7 +32,7 @@ public class InvoiceApprovalPostEndpointsTest
 
         var validationSuccess = new ValidationResult();
 
-       this._validatorMock.ValidateAsync(Arg.Any<ValidateApprover>(), default)
+        this._validatorMock.ValidateAsync(Arg.Any<ValidateApprover>(), default)
            .Returns(Task.FromResult(validationSuccess));
     }
 
