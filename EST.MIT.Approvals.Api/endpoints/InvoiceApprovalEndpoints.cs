@@ -1,6 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using Approvals.Api.Models;
 using EST.MIT.Approvals.Api.Services.Interfaces;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Approvals.Api.Endpoints;
@@ -15,7 +17,9 @@ public static class InvoiceApprovalEndpoints
             .Produces(StatusCodes.Status400BadRequest)
             .WithName("GetApproversForInvoiceBySchemeAndAmount");
 
-        app.MapPost("/approvals/approver/validate", (ValidateApprover validateApprover, [FromServices] IInvoiceApproverService invoiceApproverService) => ValidateApprover())
+        app.MapPost("/approvals/approver/validate", ValidateApproverAsync)
+            .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status200OK)
             .WithName("ValidateApprover");
 
@@ -39,8 +43,15 @@ public static class InvoiceApprovalEndpoints
         return Results.Ok(response.Data);
     }
 
-    public static IResult ValidateApprover()
+    public static async Task<IResult> ValidateApproverAsync(IInvoiceApproverService invoiceApproverService, IValidator<ValidateApprover> validator, ValidateApprover validateApprover)
     {
+        var validationResult = await validator.ValidateAsync(validateApprover);
+
+        if (!validationResult.IsValid)
+        {
+            return Results.ValidationProblem(validationResult.ToDictionary());
+        }
+
         return Results.Ok();
     }
 

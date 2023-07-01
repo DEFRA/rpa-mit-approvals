@@ -1,4 +1,5 @@
 using Approvals.Api.Endpoints;
+using Approvals.Api.Models;
 using EST.MIT.Approvals.Api.endpoints;
 using EST.MIT.Approvals.Api.Extensions;
 using EST.MIT.Approvals.Data;
@@ -21,6 +22,10 @@ builder.Services.AddDbContext<ApprovalsContext>(options =>
 
 builder.Services.AddSwaggerServices();
 builder.Services.AddApprovalsServices();
+
+builder.Services.AddOptions();
+builder.Services.Configure<ValidationSettings>(
+    builder.Configuration.GetSection("ValidationSettings"));
 
 var app = builder.Build();
 
