@@ -35,13 +35,11 @@ public class InvoiceApproverService : IInvoiceApproverService
                 return returnValue;
             }
 
-
             var approver = await this._approverRepository.GetApproverByEmailAddressAndSchemeAsync(approverEmailAddress, schemeCode);
 
             returnValue.Data = approver != null;
             returnValue.IsSuccess = true;
             return returnValue;
-            
         }
         catch (Exception exception)
         {

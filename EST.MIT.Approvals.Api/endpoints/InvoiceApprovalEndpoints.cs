@@ -36,8 +36,7 @@ public static class InvoiceApprovalEndpoints
         {
             return Results.BadRequest(response.Message);
         }
-        
+
         return response.Data ? Results.Ok() : Results.NotFound();
     }
-
 }
