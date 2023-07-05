@@ -15,18 +15,20 @@ public class ApprovalsContext : DbContext
 {
     public DbSet<ApproverEntity> Approvers => Set<ApproverEntity>();
 
-    public DbSet<GradeEntity> Grades => Set<GradeEntity>();
-
     public DbSet<SchemeEntity> Schemes => Set<SchemeEntity>();
-
-    public DbSet<SchemeGradeEntity> SchemeGrades => Set<SchemeGradeEntity>();
-
-    public DbSet<SchemeApprovalGradeEntity> SchemeApprovalGrades => Set<SchemeApprovalGradeEntity>();
-
-    public DbSet<ApproverSchemeGradeEntity> ApproverSchemeGrades => Set<ApproverSchemeGradeEntity>();
 
 
     public ApprovalsContext(DbContextOptions<ApprovalsContext> options) : base(options)
     {
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<ApproverEntity>()
+            .HasMany(e => e.Schemes)
+            .WithMany(e => e.Approvers)
+            .UsingEntity<ApproverSchemeEntity>(
+                l => l.HasOne<SchemeEntity>().WithMany().HasForeignKey(e => e.SchemeId),
+                r => r.HasOne<ApproverEntity>().WithMany().HasForeignKey(e => e.ApproverId));
     }
 }

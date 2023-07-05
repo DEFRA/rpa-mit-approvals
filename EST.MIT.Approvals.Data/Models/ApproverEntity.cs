@@ -11,7 +11,7 @@ public class ApproverEntity : BaseEntity
 
     public string LastName { get; init; } = default!;
 
-    public ICollection<ApproverSchemeGradeEntity> SchemeGrades { get; set; } = default!;
+    public List<SchemeEntity> Schemes { get; set; } = new();
 
     public ApproverEntity(string emailAddress, string firstName, string lastName)
     {

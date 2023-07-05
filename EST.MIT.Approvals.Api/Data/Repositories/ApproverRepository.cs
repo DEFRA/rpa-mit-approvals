@@ -12,10 +12,12 @@ public class ApproverRepository : Repository<ApproverEntity>, IApproverRepositor
     {
     }
 
-    public async Task<IEnumerable<ApproverEntity>> GetApproversBySchemeAndGradeAsync(IEnumerable<int> schemeGradeIds)
+    public async Task<ApproverEntity?> GetApproverByEmailAddressAndSchemeAsync(string approverEmailAddress, string schemeCode)
     {
         return await this.Context.Approvers
-            .Include(x => x.SchemeGrades)
-            .Where(x => x.SchemeGrades.Any(y => schemeGradeIds.Contains(y.Id))).ToListAsync();
+            .Include(x => x.Schemes)
+            .FirstOrDefaultAsync(x =>
+                x.EmailAddress.ToLower().Trim() == approverEmailAddress.ToLower().Trim() &&
+                x.Schemes.Any(y => string.Equals(y.Code, schemeCode, StringComparison.CurrentCultureIgnoreCase)));
     }
 }

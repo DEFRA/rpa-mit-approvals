@@ -3,6 +3,7 @@ using System;
 using EST.MIT.Approvals.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EST.MIT.Approvals.Data.Migrations
 {
     [DbContext(typeof(ApprovalsContext))]
-    partial class ApprovalsContextModelSnapshot : ModelSnapshot
+    [Migration("20230703144450_UpdateEntitiesBasedOnERDv2")]
+    partial class UpdateEntitiesBasedOnERDv2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
