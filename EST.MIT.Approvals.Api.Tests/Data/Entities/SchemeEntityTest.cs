@@ -14,13 +14,9 @@ public class SchemeEntityTests
     {
         var entity = new SchemeEntity
         {
-            Name = "Scheme1",
-            Description = "Scheme 1 Description",
             Code = "SCH1"
         };
 
-        Assert.Equal("Scheme1", entity.Name);
-        Assert.Equal("Scheme 1 Description", entity.Description);
         Assert.Equal("SCH1", entity.Code);
     }
 

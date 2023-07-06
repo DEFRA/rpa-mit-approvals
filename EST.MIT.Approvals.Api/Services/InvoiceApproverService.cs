@@ -6,68 +6,44 @@ namespace EST.MIT.Approvals.Api.Services;
 
 public class InvoiceApproverService : IInvoiceApproverService
 {
-    private readonly ISchemeRepository _schemeRepository;
     private readonly IApproverRepository _approverRepository;
-    private readonly ISchemeApprovalGradeRepository _schemeApprovalGradeRepository;
     private readonly ILogger<InvoiceApproverService> _logger;
 
     public InvoiceApproverService(
-        ISchemeRepository schemeRepository,
         IApproverRepository approverRepository,
-        ISchemeApprovalGradeRepository schemeApprovalGradeApproverRepository,
         ILogger<InvoiceApproverService> logger)
     {
-        _schemeRepository = schemeRepository;
         _approverRepository = approverRepository;
-        _schemeApprovalGradeRepository = schemeApprovalGradeApproverRepository;
         _logger = logger;
     }
 
-    public async Task<ReturnResult<IEnumerable<InvoiceApprover>>> GetApproversForInvoiceBySchemeAndAmountAsync(string invoiceScheme, decimal invoiceAmount)
+    public async Task<ReturnResult<bool>> ConfirmApproverForInvoiceBySchemeAsync(string approverEmailAddress, string schemeCode)
     {
-        var returnValue = new ReturnResult<IEnumerable<InvoiceApprover>>();
+        var returnValue = new ReturnResult<bool>();
 
         try
         {
-            var scheme = await this._schemeRepository.GetByCodeAsync(invoiceScheme);
-
-            if (scheme == null)
+            if (string.IsNullOrWhiteSpace(approverEmailAddress))
             {
-                returnValue.Message = "Unable to find matching scheme";
+                returnValue.Message = "Approver is required";
                 return returnValue;
             }
 
-
-            var schemeApprovalGrades = await this._schemeApprovalGradeRepository.GetAllBySchemeAndApprovalLimit(scheme.Id, invoiceAmount);
-            var schemeApprovalGradeEntities = schemeApprovalGrades.ToList();
-
-            if (!schemeApprovalGradeEntities.Any())
+            if (string.IsNullOrWhiteSpace(schemeCode))
             {
-                returnValue.Message = "Unable to find matching scheme and approval grades";
+                returnValue.Message = "Scheme is required";
                 return returnValue;
             }
 
-            var approvers = await this._approverRepository.GetApproversBySchemeAndGradeAsync(schemeApprovalGradeEntities.Select(x => x.SchemeGrade.Id));
+            var approver = await this._approverRepository.GetApproverByEmailAddressAndSchemeAsync(approverEmailAddress, schemeCode);
 
-            var approverEntities = approvers.ToList();
-            if (!approverEntities.Any())
-            {
-                returnValue.Message = "Unable to find matching approvers";
-                return returnValue;
-            }
-
-            returnValue.Data = approverEntities.Select(x => new InvoiceApprover()
-            {
-                Id = x.Id,
-                FirstName = x.FirstName,
-                LastName = x.LastName,
-                EmailAddress = x.EmailAddress,
-            });
+            returnValue.Data = approver != null;
             returnValue.IsSuccess = true;
+            return returnValue;
         }
         catch (Exception exception)
         {
-            this._logger.LogError(exception, "Unable to get approvers for invoice");
+            this._logger.LogError(exception, "Unable to confirm approver for invoice");
             returnValue.Message = exception.Message;
         }
 

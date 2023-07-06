@@ -105,23 +105,6 @@ The following combinations will yield results
 
 ### GET Endpoints
 
-`GET /approvals/invoiceapprovers?invoiceScheme={invoiceScheme}&invoiceAmount={invoiceAmount}`
-
-Retrieves a list of valid approvals codes for the given invoice scheme and invoice amount path.
-
-200 Response Example
-
-```json
-[
-  {
-    "id": 1,
-    "emailAddress": "ApproverOne@defra.gov.uk",
-    "firstName": "Approver",
-    "lastName": "One,"
-  }
-]
-```
-
 
 `GET /approvals/healthcheck/ping`
 
@@ -148,6 +131,8 @@ Payload Example
 ]
 ```
 
-For now will always return a 200 response with no payload.
-But future aim is to validate the email address specified and that the email has a link to the scheme specified.
+The approver must have an email address domain of @defra.gov.uk or @rpa.gov.uk.
 
+If the scheme is empty, or the approver email is empty/not valid then a 400 bad request will be returned.
+
+Otherwise until the other tickets are played it will return a 200.

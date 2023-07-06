@@ -15,14 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Data\Repositories\SchemeApprovalGradeRepository.cs" />
-    <Compile Include="Data\Repositories\Interfaces\ISchemeApprovalGradeRepository.cs" />
     <Compile Include="Data\Repositories\SchemeRepository.cs" />
-    <Compile Include="Data\Repositories\GradeRepository.cs" />
     <Compile Include="Data\Repositories\Interfaces\ISchemeRepository.cs" />
     <Compile Include="Data\Repositories\Repository.cs" />
     <Compile Include="Data\Repositories\Interfaces\IRepository.cs" />
-    <Compile Include="Data\Repositories\Interfaces\IGradeRepository.cs" />
     <Compile Include="Data\Repositories\Interfaces\IApproverRepository.cs" />
     <Compile Include="Data\Repositories\ApproverRepository.cs" />
   </ItemGroup>

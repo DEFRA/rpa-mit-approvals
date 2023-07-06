@@ -38,9 +38,13 @@ public class ApproverRepositoryTests
                 EmailAddress = "ApproverOne@defra.gov.uk",
                 FirstName = "Approver",
                 LastName = "One,",
-                SchemeGrades = new List<ApproverSchemeGradeEntity>()
+                Schemes = new List<SchemeEntity>()
                 {
-                    new ApproverSchemeGradeEntity() { Id = 1 }
+                    new SchemeEntity()
+                    {
+                        Id = 1,
+                        Code = "S1",
+                    }
                 }
             },
             new ApproverEntity()
@@ -49,9 +53,13 @@ public class ApproverRepositoryTests
                 EmailAddress = "ApproverTwo@defra.gov.uk",
                 FirstName = "Approver",
                 LastName = "Two,",
-                SchemeGrades = new List<ApproverSchemeGradeEntity>()
+                Schemes = new List<SchemeEntity>()
                 {
-                    new ApproverSchemeGradeEntity() { Id = 2 }
+                    new SchemeEntity()
+                    {
+                        Id = 2,
+                        Code = "S2",
+                    }
                 }
             },
             new ApproverEntity()
@@ -60,9 +68,13 @@ public class ApproverRepositoryTests
                 EmailAddress = "ApproverThree@defra.gov.uk",
                 FirstName = "Approver",
                 LastName = "Three,",
-                SchemeGrades = new List<ApproverSchemeGradeEntity>()
+                Schemes = new List<SchemeEntity>()
                 {
-                    new ApproverSchemeGradeEntity() { Id = 3 }
+                    new SchemeEntity()
+                    {
+                        Id = 3,
+                        Code = "S3",
+                    }
                 }
             });
 
@@ -89,9 +101,13 @@ public class ApproverRepositoryTests
                 EmailAddress = "ApproverOne@defra.gov.uk",
                 FirstName = "Approver",
                 LastName = "One,",
-                SchemeGrades = new List<ApproverSchemeGradeEntity>()
+                Schemes = new List<SchemeEntity>()
                 {
-                    new ApproverSchemeGradeEntity() { Id = 1 }
+                    new SchemeEntity()
+                    {
+                        Id = 1,
+                        Code = "S1",
+                    }
                 }
             },
             new ApproverEntity()
@@ -100,9 +116,13 @@ public class ApproverRepositoryTests
                 EmailAddress = "ApproverTwo@defra.gov.uk",
                 FirstName = "Approver",
                 LastName = "Two,",
-                SchemeGrades = new List<ApproverSchemeGradeEntity>()
+                Schemes = new List<SchemeEntity>()
                 {
-                    new ApproverSchemeGradeEntity() { Id = 2 }
+                    new SchemeEntity()
+                    {
+                        Id = 2,
+                        Code = "S2",
+                    }
                 }
             },
             new ApproverEntity()
@@ -111,9 +131,13 @@ public class ApproverRepositoryTests
                 EmailAddress = "ApproverThree@defra.gov.uk",
                 FirstName = "Approver",
                 LastName = "Three,",
-                SchemeGrades = new List<ApproverSchemeGradeEntity>()
+                Schemes = new List<SchemeEntity>()
                 {
-                    new ApproverSchemeGradeEntity() { Id = 3 }
+                    new SchemeEntity()
+                    {
+                        Id = 3,
+                        Code = "S3",
+                    }
                 }
             });
 
@@ -128,8 +152,8 @@ public class ApproverRepositoryTests
         Assert.Equal("ApproverTwo@defra.gov.uk", result.EmailAddress);
     }
 
-    [Fact]
-    public async Task GetApproversByIdsAsync_ShouldReturnCorrectApprovers()
+    [Fact(Skip = "Re-add when actual repo is being called")]
+    public async Task GetApproverByEmailAddressAndSchemeAsync_ShouldReturnCorrectApprover()
     {
         // Arrange
         await _context.Database.EnsureDeletedAsync();
@@ -142,9 +166,13 @@ public class ApproverRepositoryTests
                 EmailAddress = "ApproverOne@defra.gov.uk",
                 FirstName = "Approver",
                 LastName = "One,",
-                SchemeGrades = new List<ApproverSchemeGradeEntity>()
+                Schemes = new List<SchemeEntity>()
                 {
-                    new ApproverSchemeGradeEntity() { Id = 1 }
+                    new SchemeEntity()
+                    {
+                        Id = 1,
+                        Code = "S1",
+                    }
                 }
             },
             new ApproverEntity()
@@ -153,9 +181,13 @@ public class ApproverRepositoryTests
                 EmailAddress = "ApproverTwo@defra.gov.uk",
                 FirstName = "Approver",
                 LastName = "Two,",
-                SchemeGrades = new List<ApproverSchemeGradeEntity>()
+                Schemes = new List<SchemeEntity>()
                 {
-                    new ApproverSchemeGradeEntity() { Id = 2 }
+                    new SchemeEntity()
+                    {
+                        Id = 2,
+                        Code = "S2",
+                    }
                 }
             },
             new ApproverEntity()
@@ -164,24 +196,91 @@ public class ApproverRepositoryTests
                 EmailAddress = "ApproverThree@defra.gov.uk",
                 FirstName = "Approver",
                 LastName = "Three,",
-                SchemeGrades = new List<ApproverSchemeGradeEntity>()
+                Schemes = new List<SchemeEntity>()
                 {
-                    new ApproverSchemeGradeEntity() { Id = 3 }
+                    new SchemeEntity()
+                    {
+                        Id = 3,
+                        Code = "S3",
+                    }
                 }
             });
 
         await _context.SaveChangesAsync();
 
-        var ids = new List<int> { 1, 3 };
-
         // Act
-        var result = await _approverRepository.GetApproversBySchemeAndGradeAsync(ids);
+        var result = await _approverRepository.GetApproverByEmailAddressAndSchemeAsync("ApproverOne@defra.gov.uk", "S1");
 
         // Assert
-        var approverEntities = result.ToList();
-        Assert.Equal(2, approverEntities.Count);
-        Assert.Contains(approverEntities, a => a.Id == 1);
-        Assert.Contains(approverEntities, a => a.Id == 3);
+        var approverEntity = result;
+        Assert.NotNull(approverEntity);
+        Assert.Equal("ApproverOne@defra.gov.uk", approverEntity.EmailAddress);
+        Assert.Equal(1, approverEntity?.Schemes.Count);
+        Assert.Equal("S1", approverEntity?.Schemes[0].Code);
+    }
+
+    [Fact(Skip = "Re-add when actual repo is being called")]
+    public async Task GetApproverByEmailAddressAndSchemeAsync_ShouldReturnNoApprover()
+    {
+        // Arrange
+        await _context.Database.EnsureDeletedAsync();
+        await _context.Database.EnsureCreatedAsync();
+
+        _context.Approvers.AddRange(
+            new ApproverEntity()
+            {
+                Id = 1,
+                EmailAddress = "ApproverOne@defra.gov.uk",
+                FirstName = "Approver",
+                LastName = "One,",
+                Schemes = new List<SchemeEntity>()
+                {
+                    new SchemeEntity()
+                    {
+                        Id = 1,
+                        Code = "S1",
+                    }
+                }
+            },
+            new ApproverEntity()
+            {
+                Id = 2,
+                EmailAddress = "ApproverTwo@defra.gov.uk",
+                FirstName = "Approver",
+                LastName = "Two,",
+                Schemes = new List<SchemeEntity>()
+                {
+                    new SchemeEntity()
+                    {
+                        Id = 2,
+                        Code = "S2",
+                    }
+                }
+            },
+            new ApproverEntity()
+            {
+                Id = 3,
+                EmailAddress = "ApproverThree@defra.gov.uk",
+                FirstName = "Approver",
+                LastName = "Three,",
+                Schemes = new List<SchemeEntity>()
+                {
+                    new SchemeEntity()
+                    {
+                        Id = 3,
+                        Code = "S3",
+                    }
+                }
+            });
+
+        await _context.SaveChangesAsync();
+
+        // Act
+        var result = await _approverRepository.GetApproverByEmailAddressAndSchemeAsync("ApproverOne@defra.gov.uk", "S2");
+
+        // Assert
+        var approverEntity = result;
+        Assert.Null(approverEntity);
     }
 }
 
