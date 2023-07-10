@@ -22,6 +22,7 @@ public static class SeedProvider
         context.Database.EnsureCreated();
 
         context.SeedData(context.Schemes, ReadSeedData<SchemeEntity>($"{BaseDir}/schemes.json"));
+        context.SeedData(context.Approvers, ReadSeedData<ApproverEntity>($"{BaseDir}/approvers.json"));
 
         sw.Stop();
 
