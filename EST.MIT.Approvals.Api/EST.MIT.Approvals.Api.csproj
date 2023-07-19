@@ -38,8 +38,4 @@
     <ProjectReference Include="..\EST.MIT.Approvals.Data\EST.MIT.Approvals.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Resources\SeedData\" />
-  </ItemGroup>
-
 </Project>

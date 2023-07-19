@@ -1,7 +1,6 @@
 using Approvals.Api.Endpoints;
 using Approvals.Api.Models;
 using EST.MIT.Approvals.Api.endpoints;
-using EST.MIT.Approvals.Api.Extensions;
 using EST.MIT.Approvals.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,10 +28,6 @@ builder.Services.Configure<ValidationSettings>(
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment() && args.Contains("--seed-ref-data"))
-{
-    app.UseReferenceDataSeeding();
-}
 
 app.SwaggerEndpoints();
 app.MapHealthCheckGetEndpoints();
