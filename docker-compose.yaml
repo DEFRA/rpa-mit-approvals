@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  rpa-mit-approvals:
+    build:
+      context: .
+      target: production
+    image: rpa-mit-approvals
+    container_name: rpa-mit-approvals
+    depends_on:
+      - est-mit-approvals-postgres
+    environment:
+      COMPlus_EnableDiagnostics: 0
+      POSTGRES_HOST: ${POSTGRES_HOST:-est-mit-approvals-postgres}
+      POSTGRES_DB: rpa_mit_approvals
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASS:-password}
+      POSTGRES_PORT: "5432"
+      SCHEMA_DEFAULT: ${POSTGRES_SCHEMA_NAME:-public}
+    ports:
+      - "3000:3000"
+    networks:
+      - postgres
+
+  est-mit-approvals-seed-provider:
+    image: est-mit-approvals-seed-provider
+    depends_on:
+      - est-mit-approvals-postgres
+    environment:
+      POSTGRES_HOST: ${POSTGRES_HOST:-est-mit-approvals-postgres}
+      POSTGRES_DB: rpa_mit_approvals
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASS:-password}
+      POSTGRES_PORT: "5432"
+      SCHEMA_DEFAULT: ${POSTGRES_SCHEMA_NAME:-public}
+    entrypoint: /home/dotnet/out/EST.MIT.Approvals.SeedProvider
+    networks:
+      - postgres
+
+  est-mit-approvals-postgres:
+    image: postgres:15.3-alpine
+    environment:
+      POSTGRES_DB: rpa_mit_approvals
+      POSTGRES_USERNAME: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASS:-password}
+    networks:
+      - postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./scripts/extract-seed-data.sh:/home/postgres/extract-seed-data.sh
+      - ./seed-data-scripts:/home/postgres/seed-data-scripts/
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_MAIL-mit@defra.gov.uk}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PW-password}
+    ports:
+      - "5050:80"
+    restart: always
+
+networks:
+  postgres:
+    driver: bridge

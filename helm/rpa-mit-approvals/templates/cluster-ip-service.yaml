@@ -1,0 +1,3 @@
+{{- include "ffc-helm-library.cluster-ip-service" (list . "rpa-mit-approvals.cluster-ip-service") -}}
+{{- define "rpa-mit-approvals.cluster-ip-service" -}}
+{{- end -}}

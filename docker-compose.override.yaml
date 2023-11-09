@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  rpa-mit-approvals:
+    build:
+      target: development
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./EST.MIT.Approvals.Api:/home/dotnet/EST.MIT.Approvals.Api/
+      - ./EST.MIT.Approvals.Api.Tests:/home/dotnet/EST.MIT.Approvals.Api.Tests
+
+  rpa-mit-approvals-postgres:
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

@@ -6,13 +6,27 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-Console.WriteLine($"DBConnectionString: {builder.Configuration["DbConnectionString"]}");
+var config = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json")
+    .AddUserSecrets<Program>()
+    .AddEnvironmentVariables()
+    .Build();
+
+var host = config["POSTGRES_HOST"];
+var db = config["POSTGRES_DB"];
+var port = config["POSTGRES_PORT"];
+var user = config["POSTGRES_USER"];
+var pass = config["POSTGRES_PASSWORD"];
+
+var postgres = string.Format(config["DbConnectionTemplate"]!, host, port, db, user, pass);
+
+Console.WriteLine($"DBConnectionString: {postgres}");
 
 builder.Services.AddDbContext<ApprovalsContext>(options =>
 {
     options
         .UseNpgsql(
-            builder.Configuration["DbConnectionString"],
+            postgres,
             x => x.MigrationsAssembly("EST.MIT.Approvals.Data")
         )
         .UseSnakeCaseNamingConvention();
