@@ -84,6 +84,23 @@ dotnet run
 Endpoints are accessible at https://localhost:7258.
 Swagger page is accessible at https://localhost:7258/swagger/index.html.
 
+## Running within a Docker container
+Set the PACKAGE_FEED_USERNAME and PACKAGE_FEED_PAT in the .env file. NOTE: ensure these credentials aren't in your commits.
+
+Then run:
+```
+ docker compose -f docker-compose.yaml up --build 
+```
+
+In a web browser go to: http://localhost:5050/browser/
+
+Register Server
+- Host name: host.docker.internal
+- Username: postgres
+- Password: password
+
+You should see the rpa_mit_approvals database and tables.
+
 ## Endpoints
 
 ### Parameters
