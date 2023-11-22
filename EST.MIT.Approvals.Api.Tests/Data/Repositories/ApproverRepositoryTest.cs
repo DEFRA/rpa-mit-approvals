@@ -152,7 +152,7 @@ public class ApproverRepositoryTests
         Assert.Equal("ApproverTwo@defra.gov.uk", result.EmailAddress);
     }
 
-    [Fact(Skip = "Re-add when actual repo is being called")]
+    [Fact]
     public async Task GetApproverByEmailAddressAndSchemeAsync_ShouldReturnCorrectApprover()
     {
         // Arrange
@@ -219,7 +219,7 @@ public class ApproverRepositoryTests
         Assert.Equal("S1", approverEntity?.Schemes[0].Code);
     }
 
-    [Fact(Skip = "Re-add when actual repo is being called")]
+    [Fact]
     public async Task GetApproverByEmailAddressAndSchemeAsync_ShouldReturnNoApprover()
     {
         // Arrange
@@ -276,7 +276,7 @@ public class ApproverRepositoryTests
         await _context.SaveChangesAsync();
 
         // Act
-        var result = await _approverRepository.GetApproverByEmailAddressAndSchemeAsync("ApproverOne@defra.gov.uk", "S2");
+        var result = await _approverRepository.GetApproverByEmailAddressAndSchemeAsync("NoApproverOne@defra.gov.uk", "S2");
 
         // Assert
         var approverEntity = result;

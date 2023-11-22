@@ -39,4 +39,14 @@ app.SwaggerEndpoints();
 app.MapHealthCheckGetEndpoints();
 app.MapInvoiceApprovalsEndpoints();
 
+//if (interceptor.IsLocalDatabase())
+//{
+//    // Run migrations if your database is local
+//    using (var scope = app.Services.CreateScope())
+//    {
+//        var db = scope.ServiceProvider.GetRequiredService<ApprovalsContext>();
+//         db.Database.Migrate(); // Don't do Migration until SeedProvider and API migrations are synced (else this step might break)
+//    }
+//}
+
 app.Run();
