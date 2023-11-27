@@ -25,4 +25,4 @@ def validateClosure = {
   }
 }
 
-buildDotNetCore project: 'EST.MIT.Approvals.Api'
+buildDotNetCore project: 'EST.MIT.Approvals.Api', validateClosure: validateClosure
