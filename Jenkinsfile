@@ -2,7 +2,7 @@
 
 def validateClosure = {
   stage('nuget.config Transform') {
-    writeFile file: './EST.MIT.Approvals.SeedProvider/nuget.config', text: """<?xml version='1.0' encoding='utf-8'?>
+    writeFile file: './EST.MIT.Approvals.Api/nuget.config', text: """<?xml version='1.0' encoding='utf-8'?>
         <configuration>
         <packageSources>
             <clear />
