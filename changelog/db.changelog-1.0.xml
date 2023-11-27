@@ -1,6 +1,79 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.10.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
-    <changeSet author="David Baker" id="1686901207710-48">
-      <tagDatabase tag="v0.0.0" />
+    <changeSet author="liquibase (generated)" id="1700568022969-1">
+        <createTable tableName="schemes">
+            <column autoIncrement="true" name="id" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_schemes"/>
+            </column>
+            <column name="code" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_on" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="is_deleted" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="liquibase (generated)" id="1700568022969-2">
+        <createTable tableName="approvers">
+            <column autoIncrement="true" name="id" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_approvers"/>
+            </column>
+            <column name="email_address" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="first_name" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_on" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="is_deleted" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="liquibase (generated)" id="1700568022969-3">
+        <createTable tableName="approver_scheme_entity">
+            <column autoIncrement="true" name="id" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_approver_scheme_entity"/>
+            </column>
+            <column name="approver_id" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="scheme_id" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_on" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="is_deleted" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="liquibase (generated)" id="1700568022969-4">
+        <addForeignKeyConstraint baseColumnNames="approver_id" baseTableName="approver_scheme_entity" constraintName="fk_approver_scheme_entity_approvers_approver_id" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="approvers" validate="true"/>
+    </changeSet>
+    <changeSet author="liquibase (generated)" id="1700568022969-5">
+        <addForeignKeyConstraint baseColumnNames="scheme_id" baseTableName="approver_scheme_entity" constraintName="fk_approver_scheme_entity_schemes_scheme_id" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="schemes" validate="true"/>
+    </changeSet>
+    <changeSet author="liquibase (generated)" id="1700568022969-6">
+        <createIndex indexName="ix_approver_scheme_entity_approver_id" tableName="approver_scheme_entity">
+            <column name="approver_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="liquibase (generated)" id="1700568022969-7">
+        <createIndex indexName="ix_approver_scheme_entity_scheme_id" tableName="approver_scheme_entity">
+            <column name="scheme_id"/>
+        </createIndex>
     </changeSet>
 </databaseChangeLog>

@@ -4,10 +4,15 @@ ARG PARENT_VERSION=1.5.0-dotnet6.0
 FROM defradigital/dotnetcore-development:$PARENT_VERSION AS development
 
 ARG PARENT_VERSION
+ARG PACKAGE_FEED_URL
+ARG PACKAGE_FEED_USERNAME
+ARG PACKAGE_FEED_PAT
 
 LABEL uk.gov.defra.parent-image=defra-dotnetcore-development:${PARENT_VERSION}
 
 RUN mkdir -p /home/dotnet/EST.MIT.Approvals.Api/ /home/dotnet/EST.MIT.Approvals.Api.Tests/ /home/dotnet/EST.MIT.Approvals.Data/
+
+COPY --chown=dotnet:dotnet ./docker-nuget.config ./nuget.config
 
 COPY --chown=dotnet:dotnet ./EST.MIT.Approvals.Data/*.csproj ./EST.MIT.Approvals.Data/
 RUN dotnet restore ./EST.MIT.Approvals.Data/EST.MIT.Approvals.Data.csproj

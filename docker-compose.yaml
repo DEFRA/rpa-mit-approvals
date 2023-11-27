@@ -5,6 +5,10 @@ services:
     build:
       context: .
       target: production
+      args:
+        - PACKAGE_FEED_URL=${PACKAGE_FEED_URL}
+        - PACKAGE_FEED_USERNAME=${PACKAGE_FEED_USERNAME:-PAT}
+        - PACKAGE_FEED_PAT=${PACKAGE_FEED_PAT}
     image: rpa-mit-approvals
     container_name: rpa-mit-approvals
     depends_on:
@@ -19,21 +23,6 @@ services:
       SCHEMA_DEFAULT: ${POSTGRES_SCHEMA_NAME:-public}
     ports:
       - "3000:3000"
-    networks:
-      - postgres
-
-  est-mit-approvals-seed-provider:
-    image: est-mit-approvals-seed-provider
-    depends_on:
-      - est-mit-approvals-postgres
-    environment:
-      POSTGRES_HOST: ${POSTGRES_HOST:-est-mit-approvals-postgres}
-      POSTGRES_DB: rpa_mit_approvals
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASS:-password}
-      POSTGRES_PORT: "5432"
-      SCHEMA_DEFAULT: ${POSTGRES_SCHEMA_NAME:-public}
-    entrypoint: /home/dotnet/out/EST.MIT.Approvals.SeedProvider
     networks:
       - postgres
 
