@@ -40,8 +40,6 @@ app.MapInvoiceApprovalsEndpoints();
 
 using (var scope = app.Services.CreateScope())
 {
-    var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
-    var logger = loggerFactory.CreateLogger<Program>();
     var db = scope.ServiceProvider.GetRequiredService<ApprovalsContext>();
 
     SeedProvider.SeedReferenceData(db, builder.Configuration);
