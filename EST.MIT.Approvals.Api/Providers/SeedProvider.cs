@@ -14,12 +14,8 @@ public static class SeedProvider
     private const string BaseDir = "Resources/SeedData";
     private static readonly string ExecutionPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
 
-    public static void SeedReferenceData(ApprovalsContext context, ILogger logger, IConfiguration configuration)
+    public static void SeedReferenceData(ApprovalsContext context, IConfiguration configuration)
     {
-        var sw = Stopwatch.StartNew(); 
-
-        logger.LogInformation("Starting seeding...");
-
         if (configuration.IsLocalDatabase(configuration))
         {
             // If prod allow LiquiBase to perform schema setup.
@@ -27,10 +23,6 @@ public static class SeedProvider
         }
 
         context.SeedData(context.Schemes, ReadSeedData<SchemeEntity>($"{BaseDir}/schemes.json"));
-
-        sw.Stop();
-
-        logger.LogInformation("Seeding approvals data completed in {elapsed} seconds", sw.Elapsed.Seconds);
     }
 
     public static void SeedData<T>(this DbContext context, DbSet<T> entity, IEnumerable<T> data)

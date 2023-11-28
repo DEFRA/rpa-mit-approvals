@@ -44,7 +44,7 @@ using (var scope = app.Services.CreateScope())
     var logger = loggerFactory.CreateLogger<Program>();
     var db = scope.ServiceProvider.GetRequiredService<ApprovalsContext>();
 
-    SeedProvider.SeedReferenceData(db, logger, builder.Configuration);
+    SeedProvider.SeedReferenceData(db, builder.Configuration);
 }
 
 app.Run();
