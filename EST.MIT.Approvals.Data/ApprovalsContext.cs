@@ -1,12 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
+﻿using EST.MIT.Approvals.Data.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EST.MIT.Approvals.Data.Models;
-using Microsoft.Extensions.Configuration;
 
 namespace EST.MIT.Approvals.Data;
 
@@ -16,7 +10,6 @@ public class ApprovalsContext : DbContext
     public DbSet<ApproverEntity> Approvers => Set<ApproverEntity>();
 
     public DbSet<SchemeEntity> Schemes => Set<SchemeEntity>();
-
 
     public ApprovalsContext(DbContextOptions<ApprovalsContext> options) : base(options)
     {
