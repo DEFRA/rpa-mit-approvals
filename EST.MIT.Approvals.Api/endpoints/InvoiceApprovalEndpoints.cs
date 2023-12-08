@@ -30,7 +30,7 @@ public static class InvoiceApprovalEndpoints
             return Results.ValidationProblem(validationResult.ToDictionary());
         }
 
-        var response = await invoiceApproverService.ConfirmApproverForInvoiceBySchemeAsync(validateApprover.ApproverEmailAddress, validateApprover.Scheme);
+        var response = await invoiceApproverService.ConfirmApproverForInvoiceByApprovalGroupAsync(validateApprover.ApproverEmailAddress, validateApprover.ApprovalGroup);
 
         if (!response.IsSuccess)
         {
