@@ -7,7 +7,7 @@ public class ValidateApproverValidator : AbstractValidator<ValidateApprover>
 {
     public ValidateApproverValidator(IOptions<ValidationSettings> validationSettings)
     {
-        RuleFor(x => x.Scheme).NotEmpty();
+        RuleFor(x => x.ApprovalGroup).NotEmpty();
 
         var domains = validationSettings.Value.AllowedEmailDomains;
         var escapedDomains = domains.Replace(".", "\\.");
