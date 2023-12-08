@@ -17,7 +17,7 @@ public class InvoiceApproverService : IInvoiceApproverService
         _logger = logger;
     }
 
-    public async Task<ReturnResult<bool>> ConfirmApproverForInvoiceBySchemeAsync(string approverEmailAddress, string schemeCode)
+    public async Task<ReturnResult<bool>> ConfirmApproverForInvoiceByApprovalGroupAsync(string approverEmailAddress, string approvalGroupCode)
     {
         var returnValue = new ReturnResult<bool>();
 
@@ -29,13 +29,13 @@ public class InvoiceApproverService : IInvoiceApproverService
                 return returnValue;
             }
 
-            if (string.IsNullOrWhiteSpace(schemeCode))
+            if (string.IsNullOrWhiteSpace(approvalGroupCode))
             {
-                returnValue.Message = "Scheme is required";
+                returnValue.Message = "Approval Group is required";
                 return returnValue;
             }
 
-            var approver = await this._approverRepository.GetApproverByEmailAddressAndSchemeAsync(approverEmailAddress, schemeCode);
+            var approver = await this._approverRepository.GetApproverByEmailAddressAndApprovalGroupAsync(approverEmailAddress, approvalGroupCode);
 
             returnValue.Data = approver != null;
             returnValue.IsSuccess = true;
