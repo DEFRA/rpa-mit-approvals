@@ -18,23 +18,23 @@ public class ValidateApproverValidatorTests
     [Fact]
     public void ShouldHaveErrorWhenSchemeIsEmpty()
     {
-        var model = new ValidateApprover { Scheme = string.Empty, ApproverEmailAddress = "test@domain1.co.uk" };
+        var model = new ValidateApprover { ApprovalGroup = string.Empty, ApproverEmailAddress = "test@domain1.co.uk" };
         var result = _validator.TestValidate(model);
-        result.ShouldHaveValidationErrorFor(x => x.Scheme);
+        result.ShouldHaveValidationErrorFor(x => x.ApprovalGroup);
     }
 
     [Fact]
     public void ShouldNotHaveErrorWhenSchemeIsSpecified()
     {
-        var model = new ValidateApprover { Scheme = "scheme", ApproverEmailAddress = "test@domain1.co.uk" };
+        var model = new ValidateApprover { ApprovalGroup = "AG1", ApproverEmailAddress = "test@domain1.co.uk" };
         var result = _validator.TestValidate(model);
-        result.ShouldNotHaveValidationErrorFor(x => x.Scheme);
+        result.ShouldNotHaveValidationErrorFor(x => x.ApprovalGroup);
     }
 
     [Fact]
     public void ShouldHaveErrorWhenApproverEmailAddressIsEmpty()
     {
-        var model = new ValidateApprover { Scheme = "scheme", ApproverEmailAddress = string.Empty };
+        var model = new ValidateApprover { ApprovalGroup = "AG1", ApproverEmailAddress = string.Empty };
         var result = _validator.TestValidate(model);
         result.ShouldHaveValidationErrorFor(x => x.ApproverEmailAddress);
     }
@@ -42,7 +42,7 @@ public class ValidateApproverValidatorTests
     [Fact]
     public void ShouldHaveErrorWhenApproverEmailAddressIsNotValid()
     {
-        var model = new ValidateApprover { Scheme = "scheme", ApproverEmailAddress = "notavalidemail" };
+        var model = new ValidateApprover { ApprovalGroup = "AG1", ApproverEmailAddress = "notavalidemail" };
         var result = _validator.TestValidate(model);
         result.ShouldHaveValidationErrorFor(x => x.ApproverEmailAddress);
     }
@@ -50,7 +50,7 @@ public class ValidateApproverValidatorTests
     [Fact]
     public void ShouldHaveErrorWhenApproverEmailAddressIsNotInAllowedDomains()
     {
-        var model = new ValidateApprover { Scheme = "scheme", ApproverEmailAddress = "test@otherdomain.com" };
+        var model = new ValidateApprover { ApprovalGroup = "AG1", ApproverEmailAddress = "test@otherdomain.com" };
         var result = _validator.TestValidate(model);
         result.ShouldHaveValidationErrorFor(x => x.ApproverEmailAddress);
     }
@@ -58,7 +58,7 @@ public class ValidateApproverValidatorTests
     [Fact]
     public void ShouldNotHaveErrorWhenApproverEmailAddressIsInAllowedDomains()
     {
-        var model = new ValidateApprover { Scheme = "scheme", ApproverEmailAddress = "test@domain1.co.uk" };
+        var model = new ValidateApprover { ApprovalGroup = "AG1", ApproverEmailAddress = "test@domain1.co.uk" };
         var result = _validator.TestValidate(model);
         result.ShouldNotHaveValidationErrorFor(x => x.ApproverEmailAddress);
     }

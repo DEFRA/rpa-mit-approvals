@@ -13,7 +13,7 @@ public class InvoiceApproversServiceTest
     private readonly Mock<IApproverRepository> _approverRepositoryMock;
     private readonly Mock<ILogger<InvoiceApproverService>> _loggerMock;
 
-    private readonly SchemeEntity _scheme;
+    private readonly ApprovalGroupEntity _approvalGroup;
     private readonly ApproverEntity _approver;
 
     public InvoiceApproversServiceTest()
@@ -21,12 +21,11 @@ public class InvoiceApproversServiceTest
         this._approverRepositoryMock = new Mock<IApproverRepository>();
         this._loggerMock = new Mock<ILogger<InvoiceApproverService>>();
 
-        this._scheme = new SchemeEntity()
+        this._approvalGroup = new ApprovalGroupEntity()
         {
             Id = 1,
-            Code = "S1",
+            Code = "EA",
         };
-
 
         this._approver = new ApproverEntity()
         {
@@ -34,13 +33,13 @@ public class InvoiceApproversServiceTest
             EmailAddress = "ApproverOne@defra.gov.uk",
             FirstName = "Approver",
             LastName = "One",
-            Schemes =
+            ApprovalGroups =
             {
-                this._scheme
+                this._approvalGroup
             }
         };
 
-        this._approverRepositoryMock.Setup(repository => repository.GetApproverByEmailAddressAndSchemeAsync(It.IsAny<string>(), It.IsAny<string>()))
+        this._approverRepositoryMock.Setup(repository => repository.GetApproverByEmailAddressAndApprovalGroupAsync(It.IsAny<string>(), It.IsAny<string>()))
             .ReturnsAsync(() => this._approver);
 
         this._serviceToTest = new InvoiceApproverService(this._approverRepositoryMock.Object, this._loggerMock.Object);
@@ -52,7 +51,7 @@ public class InvoiceApproversServiceTest
         var invoiceScheme = "ABC";
         var invoiceApprover = "ApproverOne@defra.gov.uk";
 
-        var result = await _serviceToTest.ConfirmApproverForInvoiceBySchemeAsync(invoiceApprover, invoiceScheme);
+        var result = await _serviceToTest.ConfirmApproverForInvoiceByApprovalGroupAsync(invoiceApprover, invoiceScheme);
 
         Assert.NotNull(result);
 
@@ -72,7 +71,7 @@ public class InvoiceApproversServiceTest
         var serviceToTest = new InvoiceApproverService(this._approverRepositoryMock.Object, this._loggerMock.Object);
 
         // Act
-        var result = await serviceToTest.ConfirmApproverForInvoiceBySchemeAsync(invoiceApprover, invoiceScheme);
+        var result = await serviceToTest.ConfirmApproverForInvoiceByApprovalGroupAsync(invoiceApprover, invoiceScheme);
 
         // Assert
         Assert.NotNull(result);
@@ -91,13 +90,13 @@ public class InvoiceApproversServiceTest
         var serviceToTest = new InvoiceApproverService(this._approverRepositoryMock.Object, this._loggerMock.Object);
 
         // Act
-        var result = await serviceToTest.ConfirmApproverForInvoiceBySchemeAsync(invoiceApprover, invoiceScheme);
+        var result = await serviceToTest.ConfirmApproverForInvoiceByApprovalGroupAsync(invoiceApprover, invoiceScheme);
 
         // Assert
         Assert.NotNull(result);
         Assert.False(result.IsSuccess);
         Assert.False(result.Data);
-        Assert.Equal("Scheme is required", result.Message);
+        Assert.Equal("Approval Group is required", result.Message);
     }
 
     [Fact]
@@ -109,13 +108,13 @@ public class InvoiceApproversServiceTest
 
         // Mock logger to throw an exception
         var approverRepositoryMock = new Mock<IApproverRepository>();
-        approverRepositoryMock.Setup(repository => repository.GetApproverByEmailAddressAndSchemeAsync(It.IsAny<string>(), It.IsAny<string>()))
+        approverRepositoryMock.Setup(repository => repository.GetApproverByEmailAddressAndApprovalGroupAsync(It.IsAny<string>(), It.IsAny<string>()))
             .Throws(new Exception("Unit Test Exception"));
 
         var serviceToTest = new InvoiceApproverService(approverRepositoryMock.Object, this._loggerMock.Object);
 
         // Act
-        var result = await serviceToTest.ConfirmApproverForInvoiceBySchemeAsync(invoiceApprover, invoiceScheme);
+        var result = await serviceToTest.ConfirmApproverForInvoiceByApprovalGroupAsync(invoiceApprover, invoiceScheme);
 
         // Assert
         Assert.NotNull(result);
@@ -131,11 +130,11 @@ public class InvoiceApproversServiceTest
         var invoiceScheme = "ABC";
         var invoiceApprover = "ApproverOne@defra.gov.uk";
 
-        _approverRepositoryMock.Setup(repository => repository.GetApproverByEmailAddressAndSchemeAsync(It.IsAny<string>(), It.IsAny<string>()))
+        _approverRepositoryMock.Setup(repository => repository.GetApproverByEmailAddressAndApprovalGroupAsync(It.IsAny<string>(), It.IsAny<string>()))
             .ReturnsAsync(() => null);
 
         // Act
-        var result = await _serviceToTest.ConfirmApproverForInvoiceBySchemeAsync(invoiceApprover, invoiceScheme);
+        var result = await _serviceToTest.ConfirmApproverForInvoiceByApprovalGroupAsync(invoiceApprover, invoiceScheme);
 
         // Assert
         Assert.NotNull(result);
