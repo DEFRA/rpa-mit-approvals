@@ -18,8 +18,6 @@
   <ItemGroup>
     <Compile Include="Data\Repositories\ApprovalGroupRepository.cs" />
     <Compile Include="Data\Repositories\Interfaces\IApprovalGroupRepository.cs" />
-    <Compile Include="Data\Repositories\SchemeRepository.cs" />
-    <Compile Include="Data\Repositories\Interfaces\ISchemeRepository.cs" />
     <Compile Include="Data\Repositories\Repository.cs" />
     <Compile Include="Data\Repositories\Interfaces\IRepository.cs" />
     <Compile Include="Data\Repositories\Interfaces\IApproverRepository.cs" />

@@ -9,7 +9,6 @@ namespace EST.MIT.Approvals.Data;
 public class ApprovalsContext : DbContext
 {
     public DbSet<ApproverEntity> Approvers => Set<ApproverEntity>();
-    public DbSet<SchemeEntity> Schemes => Set<SchemeEntity>();
     public DbSet<ApprovalGroupEntity> ApprovalGroups => Set<ApprovalGroupEntity>();
     public DbSet<ApproverApprovalGroupEntity> ApproverAprovalGroups => Set<ApproverApprovalGroupEntity>();
 

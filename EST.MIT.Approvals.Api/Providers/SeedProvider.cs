@@ -22,7 +22,6 @@ public static class SeedProvider
         }
 
         context.SeedData(context.ApprovalGroups, ReadSeedData<ApprovalGroupEntity>($"{BaseDir}/approvalGroups.json"));
-        context.SeedData(context.Schemes, ReadSeedData<SchemeEntity>($"{BaseDir}/schemes.json"));
         context.SeedData(context.Approvers, ReadSeedData<ApproverEntity>($"{BaseDir}/approvers.json"));
         context.SeedApproverGroupLinks(context.ApproverAprovalGroups, ReadSeedData<ApproverApprovalGroupMap>($"{BaseDir}/approverApprovalGroups.json"));
 
