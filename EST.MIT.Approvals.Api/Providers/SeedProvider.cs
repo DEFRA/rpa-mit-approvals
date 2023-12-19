@@ -17,15 +17,13 @@ public static class SeedProvider
     {
         if (configuration.IsLocalDatabase(configuration))
         {
-            // If prod allow LiquiBase to perform schema setup.
+            // If prod allow LiquiBase to perform schema setup and seed from SQL script
             context.Database.EnsureCreated();
+
+            context.SeedData(context.ApprovalGroups, ReadSeedData<ApprovalGroupEntity>($"{BaseDir}/approvalGroups.json"));
+            context.SeedData(context.Approvers, ReadSeedData<ApproverEntity>($"{BaseDir}/approvers.json"));
+            context.SeedApproverGroupLinks(context.ApproverAprovalGroups, ReadSeedData<ApproverApprovalGroupMap>($"{BaseDir}/approverApprovalGroups.json"));
         }
-
-        context.SeedData(context.ApprovalGroups, ReadSeedData<ApprovalGroupEntity>($"{BaseDir}/approvalGroups.json"));
-        context.SeedData(context.Approvers, ReadSeedData<ApproverEntity>($"{BaseDir}/approvers.json"));
-        context.SeedApproverGroupLinks(context.ApproverAprovalGroups, ReadSeedData<ApproverApprovalGroupMap>($"{BaseDir}/approverApprovalGroups.json"));
-
-     //   var MyGroups = context.Approvers.Where(a => a.EmailAddress == "andy.gibbons@defra.gov.uk").FirstOrDefault()?.ApprovalGroups;
     }
 
     public static void SeedData<T>(this ApprovalsContext context, DbSet<T> entity, IEnumerable<T> data)
