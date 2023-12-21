@@ -18,7 +18,6 @@ public static class ApprovalsDefinition
 
         // repositories
         services.AddScoped<IApproverRepository, ApproverRepository>();
-        services.AddScoped<ISchemeRepository, SchemeRepository>();
 
         // validators
         services.AddScoped<IValidator<ValidateApprover>, ValidateApproverValidator>();

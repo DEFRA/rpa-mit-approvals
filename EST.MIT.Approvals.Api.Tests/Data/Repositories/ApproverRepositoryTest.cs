@@ -42,12 +42,12 @@ public class ApproverRepositoryTests
                 EmailAddress = "ApproverOne@defra.gov.uk",
                 FirstName = "Approver",
                 LastName = "One,",
-                Schemes = new List<SchemeEntity>()
+                ApprovalGroups = new List<ApprovalGroupEntity>()
                 {
-                    new SchemeEntity()
+                    new ApprovalGroupEntity()
                     {
                         Id = 1,
-                        Code = "S1",
+                        Code = "AG1",
                     }
                 }
             },
@@ -57,12 +57,12 @@ public class ApproverRepositoryTests
                 EmailAddress = "ApproverTwo@defra.gov.uk",
                 FirstName = "Approver",
                 LastName = "Two,",
-                Schemes = new List<SchemeEntity>()
+                ApprovalGroups = new List<ApprovalGroupEntity>()
                 {
-                    new SchemeEntity()
+                    new ApprovalGroupEntity()
                     {
                         Id = 2,
-                        Code = "S2",
+                        Code = "AG2",
                     }
                 }
             },
@@ -72,12 +72,12 @@ public class ApproverRepositoryTests
                 EmailAddress = "ApproverThree@defra.gov.uk",
                 FirstName = "Approver",
                 LastName = "Three,",
-                Schemes = new List<SchemeEntity>()
+                ApprovalGroups = new List<ApprovalGroupEntity>()
                 {
-                    new SchemeEntity()
+                    new ApprovalGroupEntity()
                     {
                         Id = 3,
-                        Code = "S3",
+                        Code = "AG3",
                     }
                 }
             });
@@ -105,12 +105,12 @@ public class ApproverRepositoryTests
                 EmailAddress = "ApproverOne@defra.gov.uk",
                 FirstName = "Approver",
                 LastName = "One,",
-                Schemes = new List<SchemeEntity>()
+                ApprovalGroups = new List<ApprovalGroupEntity>()
                 {
-                    new SchemeEntity()
+                    new ApprovalGroupEntity()
                     {
                         Id = 1,
-                        Code = "S1",
+                        Code = "AG1",
                     }
                 }
             },
@@ -120,12 +120,12 @@ public class ApproverRepositoryTests
                 EmailAddress = "ApproverTwo@defra.gov.uk",
                 FirstName = "Approver",
                 LastName = "Two,",
-                Schemes = new List<SchemeEntity>()
+                ApprovalGroups = new List<ApprovalGroupEntity>()
                 {
-                    new SchemeEntity()
+                    new ApprovalGroupEntity()
                     {
                         Id = 2,
-                        Code = "S2",
+                        Code = "AG2",
                     }
                 }
             },
@@ -135,12 +135,12 @@ public class ApproverRepositoryTests
                 EmailAddress = "ApproverThree@defra.gov.uk",
                 FirstName = "Approver",
                 LastName = "Three,",
-                Schemes = new List<SchemeEntity>()
+                ApprovalGroups = new List<ApprovalGroupEntity>()
                 {
-                    new SchemeEntity()
+                    new ApprovalGroupEntity()
                     {
                         Id = 3,
-                        Code = "S3",
+                        Code = "AG3",
                     }
                 }
             });
@@ -170,12 +170,12 @@ public class ApproverRepositoryTests
                 EmailAddress = "ApproverOne@defra.gov.uk",
                 FirstName = "Approver",
                 LastName = "One,",
-                Schemes = new List<SchemeEntity>()
+                ApprovalGroups = new List<ApprovalGroupEntity>()
                 {
-                    new SchemeEntity()
+                    new ApprovalGroupEntity()
                     {
                         Id = 1,
-                        Code = "S1",
+                        Code = "NE",
                     }
                 }
             },
@@ -185,12 +185,12 @@ public class ApproverRepositoryTests
                 EmailAddress = "ApproverTwo@defra.gov.uk",
                 FirstName = "Approver",
                 LastName = "Two,",
-                Schemes = new List<SchemeEntity>()
+                ApprovalGroups = new List<ApprovalGroupEntity>()
                 {
-                    new SchemeEntity()
+                    new ApprovalGroupEntity()
                     {
                         Id = 2,
-                        Code = "S2",
+                        Code = "BK",
                     }
                 }
             },
@@ -200,12 +200,12 @@ public class ApproverRepositoryTests
                 EmailAddress = "ApproverThree@defra.gov.uk",
                 FirstName = "Approver",
                 LastName = "Three,",
-                Schemes = new List<SchemeEntity>()
+                ApprovalGroups = new List<ApprovalGroupEntity>()
                 {
-                    new SchemeEntity()
+                    new ApprovalGroupEntity()
                     {
                         Id = 3,
-                        Code = "S3",
+                        Code = "EA",
                     }
                 }
             });
@@ -213,14 +213,14 @@ public class ApproverRepositoryTests
         await _context.SaveChangesAsync();
 
         // Act
-        var result = await _approverRepository.GetApproverByEmailAddressAndSchemeAsync("ApproverOne@defra.gov.uk", "S1");
+        var result = await _approverRepository.GetApproverByEmailAddressAndApprovalGroupAsync("ApproverOne@defra.gov.uk", "NE");
 
         // Assert
         var approverEntity = result;
         Assert.NotNull(approverEntity);
         Assert.Equal("ApproverOne@defra.gov.uk", approverEntity.EmailAddress);
-        Assert.Equal(1, approverEntity?.Schemes.Count);
-        Assert.Equal("S1", approverEntity?.Schemes[0].Code);
+        Assert.Equal(1, approverEntity?.ApprovalGroups.Count);
+        Assert.Equal("NE", approverEntity?.ApprovalGroups[0].Code);
     }
 
     [Fact]
@@ -237,12 +237,12 @@ public class ApproverRepositoryTests
                 EmailAddress = "ApproverOne@defra.gov.uk",
                 FirstName = "Approver",
                 LastName = "One,",
-                Schemes = new List<SchemeEntity>()
+                ApprovalGroups = new List<ApprovalGroupEntity>()
                 {
-                    new SchemeEntity()
+                    new ApprovalGroupEntity()
                     {
                         Id = 1,
-                        Code = "S1",
+                        Code = "EA",
                     }
                 }
             },
@@ -252,12 +252,12 @@ public class ApproverRepositoryTests
                 EmailAddress = "ApproverTwo@defra.gov.uk",
                 FirstName = "Approver",
                 LastName = "Two,",
-                Schemes = new List<SchemeEntity>()
+                ApprovalGroups = new List<ApprovalGroupEntity>()
                 {
-                    new SchemeEntity()
+                    new ApprovalGroupEntity()
                     {
                         Id = 2,
-                        Code = "S2",
+                        Code = "NE",
                     }
                 }
             },
@@ -267,12 +267,12 @@ public class ApproverRepositoryTests
                 EmailAddress = "ApproverThree@defra.gov.uk",
                 FirstName = "Approver",
                 LastName = "Three,",
-                Schemes = new List<SchemeEntity>()
+                ApprovalGroups = new List<ApprovalGroupEntity>()
                 {
-                    new SchemeEntity()
+                    new ApprovalGroupEntity()
                     {
                         Id = 3,
-                        Code = "S3",
+                        Code = "BK",
                     }
                 }
             });
@@ -280,7 +280,7 @@ public class ApproverRepositoryTests
         await _context.SaveChangesAsync();
 
         // Act
-        var result = await _approverRepository.GetApproverByEmailAddressAndSchemeAsync("NoApproverOne@defra.gov.uk", "S2");
+        var result = await _approverRepository.GetApproverByEmailAddressAndApprovalGroupAsync("NoApproverOne@defra.gov.uk", "NE");
 
         // Assert
         var approverEntity = result;

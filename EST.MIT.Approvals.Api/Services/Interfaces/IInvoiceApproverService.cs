@@ -4,5 +4,5 @@ namespace EST.MIT.Approvals.Api.Services.Interfaces;
 
 public interface IInvoiceApproverService
 {
-    Task<ReturnResult<bool>> ConfirmApproverForInvoiceBySchemeAsync(string approverEmailAddress, string schemeCode);
+    Task<ReturnResult<bool>> ConfirmApproverForInvoiceByApprovalGroupAsync(string approverEmailAddress, string schemeCode);
 }

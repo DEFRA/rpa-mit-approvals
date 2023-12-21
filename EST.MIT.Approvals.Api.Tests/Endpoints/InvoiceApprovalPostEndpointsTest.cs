@@ -37,7 +37,7 @@ public class InvoiceApprovalPostEndpointsTest
            .Returns(Task.FromResult(validationSuccess));
 
         this._invoiceApproverServiceMock
-            .ConfirmApproverForInvoiceBySchemeAsync(Arg.Any<string>(), Arg.Any<string>())
+            .ConfirmApproverForInvoiceByApprovalGroupAsync(Arg.Any<string>(), Arg.Any<string>())
             .Returns(Task.FromResult(new ReturnResult<bool>()
             {
                 IsSuccess = true,
@@ -50,7 +50,7 @@ public class InvoiceApprovalPostEndpointsTest
     {
         var payload = new ValidateApprover()
         {
-            Scheme = "SC",
+            ApprovalGroup  = "EA",
             ApproverEmailAddress = "unittest@defra.gov.uk"
         };
 
@@ -74,7 +74,7 @@ public class InvoiceApprovalPostEndpointsTest
 
         var payload = new ValidateApprover()
         {
-            Scheme = "SC",
+            ApprovalGroup = "EA",
             ApproverEmailAddress = "unittest@defra.gov.uk"
         };
 
@@ -90,7 +90,7 @@ public class InvoiceApprovalPostEndpointsTest
     public async Task InvoiceApprovalEndpoint_ValidateApprover_ShouldReturnBadRequest_WhenServiceReturnsIsSuccessFalse()
     {
         this._invoiceApproverServiceMock
-            .ConfirmApproverForInvoiceBySchemeAsync(Arg.Any<string>(), Arg.Any<string>())
+            .ConfirmApproverForInvoiceByApprovalGroupAsync(Arg.Any<string>(), Arg.Any<string>())
             .Returns(Task.FromResult(new ReturnResult<bool>()
             {
                 IsSuccess = false,
@@ -105,7 +105,7 @@ public class InvoiceApprovalPostEndpointsTest
 
         var payload = new ValidateApprover()
         {
-            Scheme = "SC",
+            ApprovalGroup = "EA",
             ApproverEmailAddress = "unittest@defra.gov.uk"
         };
 
@@ -121,7 +121,7 @@ public class InvoiceApprovalPostEndpointsTest
     public async Task InvoiceApprovalEndpoint_ValidateApprover_ShouldReturnNotFound_WhenServiceReturnsIsSuccessTrueButNoApprover()
     {
         this._invoiceApproverServiceMock
-            .ConfirmApproverForInvoiceBySchemeAsync(Arg.Any<string>(), Arg.Any<string>())
+            .ConfirmApproverForInvoiceByApprovalGroupAsync(Arg.Any<string>(), Arg.Any<string>())
             .Returns(Task.FromResult(new ReturnResult<bool>()
             {
                 IsSuccess = true,
@@ -136,7 +136,7 @@ public class InvoiceApprovalPostEndpointsTest
 
         var payload = new ValidateApprover()
         {
-            Scheme = "SC",
+            ApprovalGroup = "EA",
             ApproverEmailAddress = "unittest@defra.gov.uk"
         };
 

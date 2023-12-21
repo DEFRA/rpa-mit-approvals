@@ -12,9 +12,10 @@ public class ApproverRepository : Repository<ApproverEntity>, IApproverRepositor
     {
     }
 
-    public async Task<ApproverEntity?> GetApproverByEmailAddressAndSchemeAsync(string approverEmailAddress, string schemeCode)
+    public async Task<ApproverEntity?> GetApproverByEmailAddressAndApprovalGroupAsync(string approverEmailAddress, string approvalGroupCode)
     {
         return await this.Context.Approvers
+            .Where(a => a.ApprovalGroups.Any(g => g.Code == approvalGroupCode))
             .FirstOrDefaultAsync(x =>
                 x.EmailAddress.ToLower().Trim() == approverEmailAddress.ToLower().Trim());
     }

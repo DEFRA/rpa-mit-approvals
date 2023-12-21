@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>fe06113f-6091-41a6-8bcf-b0e608bb59c7</UserSecretsId>
-    <Version>1.0.6</Version>
+    <Version>1.0.7</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,8 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Data\Repositories\SchemeRepository.cs" />
-    <Compile Include="Data\Repositories\Interfaces\ISchemeRepository.cs" />
+    <Compile Include="Data\Repositories\ApprovalGroupRepository.cs" />
+    <Compile Include="Data\Repositories\Interfaces\IApprovalGroupRepository.cs" />
     <Compile Include="Data\Repositories\Repository.cs" />
     <Compile Include="Data\Repositories\Interfaces\IRepository.cs" />
     <Compile Include="Data\Repositories\Interfaces\IApproverRepository.cs" />
