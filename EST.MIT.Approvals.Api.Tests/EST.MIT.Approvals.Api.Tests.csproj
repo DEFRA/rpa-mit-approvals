@@ -31,6 +31,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EST.MIT.Approvals.Api\EST.MIT.Approvals.Api.csproj" />
+    <ProjectReference Include="..\EST.MIT.Approvals.Data\EST.MIT.Approvals.Data.csproj" />
   </ItemGroup>
 
 </Project>

@@ -13,16 +13,29 @@ public static class SeedProvider
     private const string BaseDir = "Resources/SeedData";
     private static readonly string ExecutionPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
 
-    public static void SeedReferenceData(ApprovalsContext context, IConfiguration configuration)
+    public static void SeedReferenceData(ApprovalsContext context, IConfiguration configuration, SQLscriptWriter? scriptWriter)
     {
         if (configuration.IsLocalDatabase(configuration))
         {
             // If prod allow LiquiBase to perform schema setup and seed from SQL script
-            context.Database.EnsureCreated();
 
-            context.SeedData(context.ApprovalGroups, ReadSeedData<ApprovalGroupEntity>($"{BaseDir}/approvalGroups.json"));
-            context.SeedData(context.Approvers, ReadSeedData<ApproverEntity>($"{BaseDir}/approvers.json"));
-            context.SeedApproverGroupLinks(context.ApproverAprovalGroups, ReadSeedData<ApproverApprovalGroupMap>($"{BaseDir}/approverApprovalGroups.json"));
+            using (scriptWriter)
+            {
+                scriptWriter?.Open();
+
+                object[] parameters = Array.Empty<object>();
+                context.Database.ExecuteSqlRaw("DROP TABLE IF EXISTS approver_aproval_groups", parameters);
+                context.Database.ExecuteSqlRaw("DROP TABLE IF EXISTS approvers ", parameters);
+                context.Database.ExecuteSqlRaw("DROP TABLE IF EXISTS approval_groups", parameters);
+
+                context.Database.EnsureCreated();
+
+                context.SeedData(context.ApprovalGroups, ReadSeedData<ApprovalGroupEntity>($"{BaseDir}/approvalGroups.json"));
+                context.SeedData(context.Approvers, ReadSeedData<ApproverEntity>($"{BaseDir}/approvers.json"));
+                context.SeedApproverGroupLinks(context.ApproverAprovalGroups, ReadSeedData<ApproverApprovalGroupMap>($"{BaseDir}/approverApprovalGroups.json"));
+
+                scriptWriter?.Close();
+            }
         }
     }
 

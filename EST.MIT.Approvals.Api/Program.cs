@@ -5,18 +5,34 @@ using EST.MIT.Approvals.Api.endpoints;
 using EST.MIT.Approvals.Api.SeedProvider.Provider;
 using EST.MIT.Approvals.Data;
 using Microsoft.EntityFrameworkCore;
+using EST.MIT.Approvals.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var interceptor = new AadAuthenticationInterceptor(new TokenGenerator(), builder.Configuration);
+SQLscriptWriter? _sqlScriptWriter = default;
+CreateAndInsertSqlCommandInterceptor? createAndInsertSQLCommandInterceptor = default;
+
+var isLocalDev = builder.Configuration.IsLocalDatabase(builder.Configuration);
+
+if (isLocalDev)
+{
+    _sqlScriptWriter = new SQLscriptWriter($"MIT_Approvals_Seed_SQL_{DateTime.Now.ToString("yyyyMMdd-HHmm")}.sql");
+    createAndInsertSQLCommandInterceptor = new CreateAndInsertSqlCommandInterceptor(_sqlScriptWriter);
+}
+
+var aadAuthenticationInterceptor = new AadAuthenticationInterceptor(new TokenGenerator(), builder.Configuration);
 
 builder.Services.AddDbContext<ApprovalsContext>(options =>
 {
-    var connStringTask = interceptor.GetConnectionStringAsync();
+    var connStringTask = aadAuthenticationInterceptor.GetConnectionStringAsync();
     var connString = connStringTask.GetAwaiter().GetResult();
 
-    options.AddInterceptors(interceptor);
-    
+    options.AddInterceptors(aadAuthenticationInterceptor);
+    if (isLocalDev && createAndInsertSQLCommandInterceptor is not null)
+    {
+        options.AddInterceptors(createAndInsertSQLCommandInterceptor);
+    }
+
     options
         .UseNpgsql(
             connString,
@@ -38,11 +54,13 @@ app.SwaggerEndpoints();
 app.MapHealthCheckGetEndpoints();
 app.MapInvoiceApprovalsEndpoints();
 
-using (var scope = app.Services.CreateScope())
+if (isLocalDev)
 {
-    var db = scope.ServiceProvider.GetRequiredService<ApprovalsContext>();
-
-    SeedProvider.SeedReferenceData(db, builder.Configuration);
+    using (var scope = app.Services.CreateScope())
+    {
+        var db = scope.ServiceProvider.GetRequiredService<ApprovalsContext>();
+        SeedProvider.SeedReferenceData(db, builder.Configuration, _sqlScriptWriter);
+    }
 }
 
 app.Run();
