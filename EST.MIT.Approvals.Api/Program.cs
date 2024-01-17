@@ -16,7 +16,7 @@ var isLocalDev = builder.Configuration.IsLocalDatabase(builder.Configuration);
 
 if (isLocalDev)
 {
-    _sqlScriptWriter = new SQLscriptWriter($"MIT_Approvals_Seed_SQL_{DateTime.Now.ToString("yyyyMMdd-HHmm")}.sql");
+    _sqlScriptWriter = new SQLscriptWriter($"MIT_Approvals_Seed_SQL_v{{version}}_{DateTime.Now.ToString("yyyyMMdd-HHmm")}.sql");
     createAndInsertSQLCommandInterceptor = new CreateAndInsertSqlCommandInterceptor(_sqlScriptWriter);
 }
 
@@ -59,7 +59,7 @@ if (isLocalDev)
     using (var scope = app.Services.CreateScope())
     {
         var db = scope.ServiceProvider.GetRequiredService<ApprovalsContext>();
-        SeedProvider.SeedReferenceData(db, builder.Configuration, _sqlScriptWriter);
+        SeedProvider.SeedReferenceData(db, builder.Configuration, _sqlScriptWriter, "1.0.2");
     }
 }
 

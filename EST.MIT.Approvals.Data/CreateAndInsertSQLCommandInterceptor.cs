@@ -61,7 +61,7 @@ namespace EST.MIT.Approvals.Data
                 case DbType.AnsiString:
                 case DbType.AnsiStringFixedLength:
                 case DbType.String:
-                    return $"'{commandParam.Value}'";
+                    return $"'{commandParam?.Value?.ToString()?.Replace("'", "''")}'";
 
                 case DbType.Date:
                 case DbType.DateTime:

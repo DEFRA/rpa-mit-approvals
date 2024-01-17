@@ -31,14 +31,15 @@ namespace EST.MIT.Approvals.Api.Tests.Data.Interceptor
         public void ReplaceParamsWorksCorrectly() {
 
             var testDate = DateTime.Now;
-            var command = new NpgsqlCommand("commandText @p0,@p1,@p2,@p3");
+            var command = new NpgsqlCommand("commandText @p0,@p1,@p2,@p3,@p4");
             command.Parameters.Add("@p0", NpgsqlTypes.NpgsqlDbType.Text).Value = "p0value";
             command.Parameters.Add("@p1", NpgsqlTypes.NpgsqlDbType.Date).Value = testDate;
             command.Parameters.Add("@p2", NpgsqlTypes.NpgsqlDbType.Date).Value = null;
             command.Parameters.Add("@p3", NpgsqlTypes.NpgsqlDbType.Integer).Value = 33;
+            command.Parameters.Add("@p4", NpgsqlTypes.NpgsqlDbType.Text).Value = "Apostro'phe";
 
             var replacedCommandText = CreateAndInsertSqlCommandInterceptor.ReplaceParams(command.CommandText, command.Parameters);
-            replacedCommandText.Should().Be($"commandText 'p0value','{testDate}',null,33");
+            replacedCommandText.Should().Be($"commandText 'p0value','{testDate}',null,33,'Apostro''phe'");
         }
     }
 }

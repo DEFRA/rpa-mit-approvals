@@ -14,9 +14,9 @@ namespace EST.MIT.Approvals.Api
             _fileName = fileName;
         }
 
-        public void Open()
+        public void Open(string version)
         {
-            _streamWriter = new StreamWriter(_fileName, append:true);
+            _streamWriter = new StreamWriter(_fileName.Replace("{version}", version), append: true);
             _streamWriter.AutoFlush = true;
         }
 
