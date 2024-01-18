@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>fe06113f-6091-41a6-8bcf-b0e608bb59c7</UserSecretsId>
-    <Version>1.0.9</Version>
+    <Version>1.0.11</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -34,7 +34,6 @@
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-      <PackageReference Include="EST.MIT.Approvals.SeedData" Version="1.0.2" />
   </ItemGroup>
 
   <ItemGroup>

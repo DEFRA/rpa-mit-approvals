@@ -13,15 +13,35 @@ public static class SeedProvider
     private const string BaseDir = "Resources/SeedData";
     private static readonly string ExecutionPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
 
-    public static void SeedReferenceData(ApprovalsContext context, IConfiguration configuration, SQLscriptWriter? scriptWriter)
+    public static void SeedReferenceData(ApprovalsContext context, IConfiguration configuration, SQLscriptWriter? scriptWriter, string version)
     {
         if (configuration.IsLocalDatabase(configuration))
         {
             // If prod allow LiquiBase to perform schema setup and seed from SQL script
 
+            // 1) ensure nuget.exe is downloaded installed (placed in system32)
+            //   Note: Make sure there's a package source mapping for EST.MIT.* to DEFRA-EST in (Visual Studio) NuGet Package Manager
+            // 2) from cmd prompt, navigate to the solution folder, e.g.
+            //        cd C:\Users\<userid>\source\repos\DEFRA\rpa-mit-approvals
+            // 3) at the command prompt, run:
+            //        nuget install "EST.MIT.Approvals.SeedData" - source "DEFRA-EST" - version "1.0.2" (Where version is the package version)
+            // this should install the package files to
+            //        C:\Users\<userid>\source\repos\DEFRA\rpa-mit-approvals\EST.MIT.Approvals.SeedData.1.0.2
+            // the BaseDir is set to load the seed data from there.
+            // 4) After seeding locally, the database should be created and populated and the SQL scripts to be run on the server should be saved to:
+            //        C:\Users\<userid>\source\repos\DEFRA\rpa-mit-approvals\EST.MIT.Approvals.Api
+
+            var BaseDirRelativeToExecutionPath = $"..\\..\\..\\..\\EST.MIT.Approvals.SeedData.{version}\\contentFiles\\any\\any\\Resources\\SeedData";
+
+            var ExecutionPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
+
+            var BaseDir = Path.Combine(ExecutionPath, BaseDirRelativeToExecutionPath);
+
             using (scriptWriter)
             {
-                scriptWriter?.Open();
+                scriptWriter?.Open(version);
+
+                scriptWriter?.WriteLine("SET DATESTYLE TO PostgreSQL,European;");
 
                 object[] parameters = Array.Empty<object>();
                 context.Database.ExecuteSqlRaw("DROP TABLE IF EXISTS approver_aproval_groups", parameters);
@@ -75,10 +95,15 @@ public static class SeedProvider
         if (approvalGroup is null) return null;
         return new ApproverApprovalGroupEntity(approver.Id, approvalGroup.Id);
     }
-    private static IEnumerable<T> ReadSeedData<T>(string path)
+
+    private static IEnumerable<T> ReadSeedData<T>(string filePath)
     {
-        var raw = File.ReadAllText(Path.Combine(ExecutionPath, path));
-        return JsonSerializer.Deserialize<IEnumerable<T>>(raw)!;
+        if (File.Exists(filePath))
+        {
+            var raw = File.ReadAllText(filePath);
+            return JsonSerializer.Deserialize<IEnumerable<T>>(raw)!;
+        }
+        return null!;
     }
 
     private class ApproverApprovalGroupMap
