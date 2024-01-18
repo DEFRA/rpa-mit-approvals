@@ -41,6 +41,8 @@ public static class SeedProvider
             {
                 scriptWriter?.Open(version);
 
+                scriptWriter?.WriteLine("SET DATESTYLE TO PostgreSQL,European;");
+
                 object[] parameters = Array.Empty<object>();
                 context.Database.ExecuteSqlRaw("DROP TABLE IF EXISTS approver_aproval_groups", parameters);
                 context.Database.ExecuteSqlRaw("DROP TABLE IF EXISTS approvers ", parameters);
