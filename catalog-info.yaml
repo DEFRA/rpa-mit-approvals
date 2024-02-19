@@ -1,0 +1,47 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: rpa-mit-approval-checker
+  description: The MIT approvals API
+  annotations:
+    github.com/project-slug: defra/rpa-mit-approvals
+    dev.azure.com/project: DEFRA-MIT
+    dev.azure.com/build-definition: rpa-mit-approval-checker
+    sonarqube.org/project-key: rpa-mit-approval-checker
+    grafana/dashboard-selector: "folderTitle == 'Managed Prometheus'"
+    backstage.io/kubernetes-id: rpa-mit-approval-checker
+  links:
+    - url: https://github.com/DEFRA/rpa-mit-approvals
+      title: View repository
+      icon: github
+    - url: https://sonarcloud.io/summary/overall?id=rpa-mit-approval-checker
+      title: SonarCloud Analysis
+    - url: https://snyk.io/test/github/DEFRA/rpa-mit-approval-checker
+      title: Snyk Analysis
+  tags:
+    - dotnet
+    - back-end
+    - database
+    - application-insights
+spec:
+  type: backend
+  lifecycle: alpha
+  owner: "group:default/lap-mit"
+  system: "system:default/lap-mit-system"
+  dependsOn:
+    - "resource:default/rpa-mit-approvals-database"
+    - "resource:default/ADPINFAI01"
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: rpa-mit-approvals-database
+  description: Database for MIT approvals data.
+  tags:
+    - postgresql
+spec:
+  type: database
+  owner: "group:default/lap-mit"
+  system: "system:default/lap-mit-system"
+  dependsOn:
+    - "resource:default/adpdbsps01"
