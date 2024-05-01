@@ -1,4 +1,4 @@
-# rpa-mit-approvals
+# Invoice Approvals
 
 This repository hosts a minimal API designed designed to manage and validate invoice approval processes within the system, ensuring that only authorized and appropriate actions are taken for sensitive operations like invoice approvals.
 
@@ -51,7 +51,7 @@ To run this service locally complete the following steps.
 
 ### Set up user secrets
 
-Use the secrets-template to create a secrets.json in the same folder location as the [EST.MIT.Approvals.Api.csproj](https://github.com/DEFRA/rpa-mit-approvals/blob/main/EST.MIT.Approvals.Api/EST.MIT.Approvals.Api.csproj") file. 
+Use the secrets-template to create a secrets.json in the same folder.
 
 An **example** connection template and the format to include permitted domains is provided here.
 
@@ -90,16 +90,6 @@ dotnet run
 ```
 
 ---
-## Running in Docker
-
-To create the application as a docker container run the following command in the parent directory.
-
-```bash
-docker compose up
-```
-
----
-
 ## Endpoints
 
 ### HTTP
