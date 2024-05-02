@@ -24,7 +24,7 @@ EXPOSE ${PORT}
 CMD dotnet watch --project ./EST.MIT.Approvals.Api run --urls "http://*:${PORT}"
 
 # Production
-FROM mcr.microsoft.com/dotnet/runtime:8.0 AS production
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS production
 
 ARG PORT=3000
 ENV ASPNETCORE_URLS=http://*:${PORT}
